@@ -3,379 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catatan Keuangan UMKM (Online)</title>
+    <title>Kuesioner Penelitian Skripsi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .prose p { margin-bottom: 0.5rem; }
-        .prose ol { margin-left: 1.5rem; list-style-type: decimal; }
-        .prose li { margin-bottom: 0.25rem; }
-        .spinner, .table-spinner { border-top-color: #4f46e5; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .deleting { opacity: 0.5; pointer-events: none; }
+
+    
+
+
+
+
+
+
+
+
+
+
+        .font-title { font-family: 'Bangers', cursive; }
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #8adcfd; /* Warm yellow background */
+            background-image: radial-gradient(#3b82f6 10%, transparent 10%);
+            background-size: 30px 30px;
+        }
+        .comic-panel {
+            border: 4px solid #1F2937;
+            box-shadow: 10px 10px 0px #1F2937;
+            border-radius: 12px;
+        }
+        .form-radio, .form-checkbox {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            width: 1.5rem; height: 1.5rem;
+            border: 3px solid #1F2937;
+            transition: 0.2s all linear;
+            margin-right: 0.5rem; position: relative; top: 4px;
+            cursor: pointer; background-color: #fff;
+        }
+        .form-radio { border-radius: 50%; }
+        .form-checkbox { border-radius: 0.25rem; }
+        .form-radio:checked { border: 8px solid #3B82F6; }
+        .form-checkbox:checked {
+            background-color: #EF4444; border-color: #1F2937;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        }
+        .scale-label {
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; font-size: 0.8rem; font-weight: 700;
+        }
+        .comic-input, .comic-select {
+            border: 3px solid #1F2937; border-radius: 8px;
+            padding: 0.5rem 1rem; font-weight: 700;
+        }
+        .comic-input:focus, .comic-select:focus {
+            outline: none; border-color: #3B82F6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4);
+        }
+        .comic-button {
+            background-color: #FBBF24; color: #1F2937;
+            border: 4px solid #1F2937; box-shadow: 6px 6px 0px #1F2937;
+            transition: all 0.1s ease-in-out; border-radius: 12px; letter-spacing: 2px;
+        }
+        .comic-button:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0px #1F2937; }
+        .comic-button:active { transform: translate(6px, 6px); box-shadow: none; }
+        .loader {
+            border: 5px solid #FDE68A; border-radius: 50%;
+            border-top: 5px solid #3B82F6;
+            width: 50px; height: 50px;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="text-gray-900">
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
-        
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Catatan Keuangan UMKM (Online)</h1>
-            <p class="text-gray-600 mt-2">Terhubung dengan Google Sheets & Analisis AI</p>
-        </header>
-
-        <main>
-            <!-- Ringkasan Saldo (Keseluruhan) -->
-            <section id="saldo-section" class="bg-white p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Ringkasan Keuangan (Total)</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                    <div class="bg-green-100 p-4 rounded-lg">
-                        <p class="text-sm text-green-700 font-medium">Total Pemasukan</p>
-                        <p id="total-pemasukan" class="text-2xl font-bold text-green-800">Rp 0</p>
-                    </div>
-                    <div class="bg-red-100 p-4 rounded-lg">
-                        <p class="text-sm text-red-700 font-medium">Total Pengeluaran</p>
-                        <p id="total-pengeluaran" class="text-2xl font-bold text-red-800">Rp 0</p>
-                    </div>
-                    <div class="bg-blue-100 p-4 rounded-lg">
-                        <p class="text-sm text-blue-700 font-medium">Saldo Akhir</p>
-                        <p id="saldo-akhir" class="text-2xl font-bold text-blue-800">Rp 0</p>
-                    </div>
-                </div>
-            </section>
+    <div class="container mx-auto max-w-3xl p-4 sm:p-8">
+        <div id="kuesionerPanel" class="bg-white p-6 sm:p-10 comic-panel">
             
-            <!-- Form dan Analisis AI -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- Form Input Transaksi -->
-                <section id="form-section" class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Tambah Transaksi Baru</h2>
-                    <form id="transaction-form" class="space-y-4">
-                        <div>
-                            <label for="deskripsi" class="block text-sm font-medium text-gray-600">Deskripsi</label>
-                            <input type="text" id="deskripsi" placeholder="Contoh: Penjualan produk A" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" required>
-                        </div>
-                        <div>
-                            <label for="nominal" class="block text-sm font-medium text-gray-600">Nominal (Rp)</label>
-                            <input type="number" id="nominal" placeholder="Contoh: 50000" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" required>
-                        </div>
-                        <div>
-                            <label for="jenis" class="block text-sm font-medium text-gray-600">Jenis Transaksi</label>
-                            <select id="jenis" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm">
-                                <option value="pemasukan">Pemasukan</option>
-                                <option value="pengeluaran">Pengeluaran</option>
-                            </select>
-                        </div>
-                        <div class="text-right">
-                            <button type="submit" id="submit-btn" class="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                                Simpan Transaksi
-                            </button>
-                        </div>
-                    </form>
-                </section>
-                <!-- Analisis AI -->
-                <section id="ai-analysis-section" class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Analisis Keuangan Cerdas ✨</h2>
-                    <div id="ai-result-container" class="bg-indigo-50 p-4 rounded-lg min-h-[150px] prose max-w-none">Klik tombol untuk mendapatkan analisis dari AI.</div>
-                    <div id="ai-error-message" class="hidden bg-red-100 text-red-700 p-4 rounded-lg my-4"></div>
-                    <div class="text-center mt-4">
-                        <button id="get-analysis-btn" class="inline-flex items-center justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                            <span id="btn-text">Dapatkan Analisis</span>
-                            <div id="ai-loading-spinner" class="hidden spinner w-5 h-5 border-4 border-white rounded-full ml-2"></div>
-                        </button>
-                    </div>
-                </section>
+            <div class="text-center border-b-4 border-gray-900 pb-6 mb-8">
+                <h1 class="font-title text-5xl sm:text-6xl text-blue-600" style="letter-spacing: 2px; -webkit-text-stroke: 2px #1F2937;">Kuesioner Penelitian!</h1>
+                <p class="mt-3 font-bold text-gray-700">Pengaruh Pemanfaatan AI dan Kreativitas Konten Digital terhadap Kinerja Pemasaran Afiliator TikTok Shop di Purwokerto</p>
             </div>
 
-            <!-- Riwayat Transaksi Hari Ini -->
-            <section id="history-section-today" class="bg-white p-6 rounded-xl shadow-md mb-8">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Riwayat Transaksi Hari Ini</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Kolom Pemasukan Hari Ini -->
-                    <div>
-                        <h3 class="text-lg font-medium text-green-700 mb-3">Pemasukan</h3>
-                        <div class="overflow-y-auto max-h-64 border rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nominal</th>
-                                        <th class="relative px-4 py-2"><span class="sr-only">Hapus</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pemasukan-list-today" class="bg-white divide-y divide-gray-200"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- Kolom Pengeluaran Hari Ini -->
-                    <div>
-                        <h3 class="text-lg font-medium text-red-700 mb-3">Pengeluaran</h3>
-                        <div class="overflow-y-auto max-h-64 border rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nominal</th>
-                                        <th class="relative px-4 py-2"><span class="sr-only">Hapus</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pengeluaran-list-today" class="bg-white divide-y divide-gray-200"></tbody>
-                            </table>
-                        </div>
-                    </div>
+            <form id="researchForm">
+                <div class="mb-10 p-5 bg-blue-100 border-2 border-gray-900 rounded-lg">
+                    <h2 class="font-title text-2xl text-gray-800 mb-2">Persetujuan Responden</h2>
+                    <p class="text-sm text-gray-700 font-bold mb-4">Dengan mengisi kuesioner ini, saya berpartisipasi sukarela. Data saya akan dirahasiakan dan hanya untuk penelitian.</p>
+                    <label class="flex items-center cursor-pointer"><input type="checkbox" id="consent" name="consent" class="form-checkbox" required><span class="ml-2 font-bold text-gray-800">OK, SAYA SETUJU!</span></label>
                 </div>
-            </section>
 
-            <!-- Semua Riwayat Transaksi -->
-            <section id="history-section-all" class="bg-white p-6 rounded-xl shadow-md">
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Semua Riwayat Transaksi</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Kolom Semua Pemasukan -->
+ 
+
+
+
+
+
+
+
+                <div id="screeningQuestions" class="space-y-8 mb-10">
+                    <h2 class="font-title text-3xl text-gray-800">Bagian A: Pertanyaan Saringan</h2>
                     <div>
-                        <h3 class="text-lg font-medium text-green-700 mb-3">Pemasukan</h3>
-                        <div class="overflow-y-auto max-h-80 border rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nominal</th>
-                                        <th class="relative px-4 py-2"><span class="sr-only">Hapus</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pemasukan-list-all" class="bg-white divide-y divide-gray-200"></tbody>
-                            </table>
+                        <label class="block text-md font-bold text-gray-700 mb-2">1. Apakah kamu seorang afiliator TikTok Shop?</label>
+                        <div class="flex space-x-6 font-bold"><label><input type="radio" name="is_affiliate" value="Ya" class="form-radio" required> Ya</label><label><input type="radio" name="is_affiliate" value="Bukan" class="form-radio"> Bukan</label></div>
+                    </div>
+                    <div>
+                        <label class="block text-md font-bold text-gray-700 mb-2">2. Apakah kamu tinggal di Purwokerto dan sekitarnya?</label>
+                        <div class="flex space-x-6 font-bold"><label><input type="radio" name="domicile" value="Ya" class="form-radio" required> Ya</label><label><input type="radio" name="domicile" value="Bukan" class="form-radio"> Bukan</label></div>
+                    </div>
+                    <div id="screening_error" class="hidden text-red-700 p-4 bg-red-200 border-2 border-red-700 rounded-lg font-bold">Waduh! Maaf ya, kuesioner ini khusus untuk afiliator TikTok Shop di Purwokerto. Terima kasih sudah mampir!</div>
+                </div>
+
+                <div id="mainQuestionnaire" class="hidden space-y-10">
+                    <div class="space-y-8">
+                        <h2 class="font-title text-3xl text-gray-800">Bagian B: Tentang Kamu!</h2>
+                        <div><label for="name" class="block text-md font-bold text-gray-700 mb-2">Nama (Inisial atau Nama Samaran)</label><input type="text" id="name" name="name" class="w-full comic-input" required></div>
+                        <div><label for="age" class="block text-md font-bold text-gray-700 mb-2">Usia</label><input type="number" id="age" name="age" class="w-full comic-input" required></div>
+                        <div><label for="duration" class="block text-md font-bold text-gray-700 mb-2">Sudah berapa lama jadi afiliator?</label><select id="duration" name="duration" class="w-full comic-select" required><option value="">Pilih durasi</option><option value="Kurang dari 6 bulan">Kurang dari 6 bulan</option><option value="6 bulan - 1 tahun">6 bulan - 1 tahun</option><option value="1 - 2 tahun">1 - 2 tahun</option><option value="Lebih dari 2 tahun">Lebih dari 2 tahun</option></select></div>
+                        <div>
+                             <label class="block text-md font-bold text-gray-700 mb-2">Tools AI apa saja yang sering kamu pakai? (Boleh pilih banyak!)</label>
+                             <div class="mt-2 space-y-2 font-bold"><label class="flex items-center"><input type="checkbox" name="ai_tools" value="ChatGPT" class="form-checkbox"><span class="ml-2 text-sm">ChatGPT</span></label><label class="flex items-center"><input type="checkbox" name="ai_tools" value="Google Gemini" class="form-checkbox"><span class="ml-2 text-sm">Google Gemini</span></label><label class="flex items-center"><input type="checkbox" name="ai_tools" value="Microsoft Copilot" class="form-checkbox"><span class="ml-2 text-sm">Microsoft Copilot</span></label><label class="flex items-center"><input type="checkbox" name="ai_tools" value="Canva AI" class="form-checkbox"><span class="ml-2 text-sm">Canva (Fitur Magic Studio / AI)</span></label><label class="flex items-center"><input type="checkbox" name="ai_tools" value="CapCut AI" class="form-checkbox"><span class="ml-2 text-sm">CapCut (Fitur AI)</span></label><div class="flex items-center"><label class="flex items-center"><input type="checkbox" name="ai_tools" value="Lainnya" class="form-checkbox"><span class="ml-2 text-sm">Lainnya:</span></label><input type="text" name="ai_tools_other" class="ml-2 flex-grow px-2 py-1 bg-transparent border-b-2 border-gray-400 focus:outline-none focus:border-blue-500 text-sm" placeholder="Sebutkan di sini..."></div></div>
                         </div>
                     </div>
-                    <!-- Kolom Semua Pengeluaran -->
-                    <div>
-                        <h3 class="text-lg font-medium text-red-700 mb-3">Pengeluaran</h3>
-                        <div class="overflow-y-auto max-h-80 border rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 sticky top-0">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nominal</th>
-                                        <th class="relative px-4 py-2"><span class="sr-only">Hapus</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="pengeluaran-list-all" class="bg-white divide-y divide-gray-200"></tbody>
-                            </table>
+
+                    <div class="space-y-8">
+                        <h2 class="font-title text-3xl text-gray-800">Bagian C: Saatnya Beraksi!</h2>
+                        <p class="text-gray-600 font-bold">Bagaimana pendapatmu tentang pernyataan di bawah ini?</p>
+                        <div class="grid grid-cols-7 gap-2 items-end pb-2 border-b-2 border-gray-400"><div class="col-span-2 text-md font-bold">Pernyataan</div><div class="scale-label">1<br>Sangat Tidak Setuju</div><div class="scale-label">2<br>Tidak Setuju</div><div class="scale-label">3<br>Netral</div><div class="scale-label">4<br>Setuju</div><div class="scale-label">5<br>Sangat Setuju</div></div>
+                        <div class="space-y-4"><h3 class="font-bold text-lg bg-blue-100 p-3 rounded-lg border-2 border-gray-900">Variabel X1: Pemanfaatan Artificial Intelligence (AI)</h3><div class="grid grid-cols-7 gap-2 items-center font-bold" id="x1-questions"></div></div>
+                        <div class="space-y-4"><h3 class="font-bold text-lg bg-red-100 p-3 rounded-lg border-2 border-gray-900">Variabel X2: Kreativitas Konten</h3><div class="grid grid-cols-7 gap-2 items-center font-bold" id="x2-questions"></div></div>
+                        <div class="space-y-4"><h3 class="font-bold text-lg bg-green-100 p-3 rounded-lg border-2 border-gray-900">Variabel Y: Kinerja Pemasaran (Hasil)</h3><div class="grid grid-cols-7 gap-2 items-center font-bold" id="y-questions"></div></div>
+                    </div>
+                    
+                    <div id="giveawaySection" class="space-y-4 pt-6 border-t-4 border-gray-900">
+                        <h2 class="font-title text-3xl text-gray-800">Ikut Undian Berhadiah?</h2>
+                        <p class="font-bold text-gray-700">Sebagai tanda terima kasih, ada undian saldo E-Wallet Dana senilai Rp 150.000 untuk 3 orang pemenang!</p>
+                        <div class="bg-yellow-100 border-2 border-gray-900 p-4 rounded-lg">
+                            <label class="flex items-center cursor-pointer font-bold"><input type="checkbox" id="giveaway_consent" name="giveaway_consent" value="Ya" class="form-checkbox"><span class="ml-2">Ya, saya mau ikut!</span></label>
+                            <div id="giveawayContact" class="hidden mt-4">
+                                <label for="giveaway_contact" class="block text-md font-bold text-gray-700 mb-2">Nomor HP (untuk E-Wallet)</label>
+                                <input type="text" id="giveaway_contact" name="giveaway_contact" class="w-full comic-input" placeholder="Contoh: 08123456789">
+                                <p class="text-xs text-gray-600 mt-1">Nomor HP hanya akan digunakan untuk menghubungi pemenang.</p>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="pt-6 border-t-4 border-gray-900">
+                        <button type="submit" id="submitButton" class="w-full text-2xl py-3 px-6 comic-button font-title flex items-center justify-center"><span id="buttonText">KIRIM JAWABAN!</span><div id="loadingSpinner" class="hidden ml-3" style="width: 20px; height: 20px; border-width: 3px;"></div></button>
                     </div>
                 </div>
-            </section>
-        </main>
+            </form>
+        </div>
+        
+        <div id="resultsPanel" class="hidden bg-white p-6 sm:p-10 comic-panel mt-8">
+            <div id="personaResult" class="text-center">
+                <!-- Konten Persona akan diisi oleh JavaScript -->
+            </div>
+            <div id="message" class="mt-6 p-4 rounded-lg text-center font-bold text-lg border-4 border-gray-900"></div>
+        </div>
     </div>
 
     <script>
-        const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxorfRq7bYC5rtP1e3yZZPpvzPtpXuTqrJ47COBAQaQV6tMDk5XDJ97aK5qEB2ZbuCJ/exec';
-        
-        const transactionForm = document.getElementById('transaction-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const totalPemasukanEl = document.getElementById('total-pemasukan');
-        const totalPengeluaranEl = document.getElementById('total-pengeluaran');
-        const saldoAkhirEl = document.getElementById('saldo-akhir');
-        
-        const pemasukanListTodayEl = document.getElementById('pemasukan-list-today');
-        const pengeluaranListTodayEl = document.getElementById('pengeluaran-list-today');
-        const pemasukanListAllEl = document.getElementById('pemasukan-list-all');
-        const pengeluaranListAllEl = document.getElementById('pengeluaran-list-all');
+        // --- KONFIGURASI GLOBAL ---
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxu_OAHjZ_Egus5wMzJYswWigDoOPI2cBFYx4JxX8r3rllukUAis4qNTj_c23witJC4ww/exec'; 
+        const questions = { x1: [{id:'X1.1',text:'Saya menggunakan tools AI untuk mencari ide-ide konten promosi.'},{id:'X1.2',text:'AI membantu saya mengembangkan atau memperluas ide konten yang sudah saya miliki.'},{id:'X1.3',text:'Saya memanfaatkan AI untuk membuat draf awal naskah video atau caption.'},{id:'X1.4',text:'Saya menggunakan AI untuk memperbaiki atau memparafrase kalimat dalam caption agar lebih menarik.'},{id:'X1.5',text:'Penggunaan AI secara signifikan mempersingkat waktu yang saya butuhkan untuk memproduksi konten.'},{id:'X1.6',text:'Saya mengandalkan data dari AI untuk mengoptimalkan strategi konten saya (misal: jadwal posting, topik).'}], x2: [{id:'X2.1',text:'Konten video saya memiliki konsep atau ide yang orisinal dan jarang ditemukan pada afiliator lain.'},{id:'X2.2',text:'Konten saya tidak hanya berfokus pada penjualan, tetapi juga memberikan nilai tambah (edukasi/hiburan) bagi penonton.'},{id:'X2.3',text:'Saya secara sadar menggunakan teknik storytelling (bercerita) untuk membangun koneksi emosional dengan audiens.'},{id:'X2.4',text:'Saya sangat memperhatikan kualitas teknis visual dalam konten saya (misalnya pencahayaan, kualitas gambar, dan angle).'},{id:'X2.5',text:'Gaya penyampaian dan bahasa yang saya gunakan dalam video terasa otentik dan benar-benar mencerminkan kepribadian saya.'},{id:'X2.6',text:'Proses editing video saya (transisi, musik, efek) dilakukan secara cermat untuk meningkatkan daya tarik konten.'}], y: [{id:'Y1.1',text:'Rata-rata, konten saya menerima tingkat interaksi (likes, comments) yang memuaskan.'},{id:'Y1.2',text:'Jumlah pengikut (followers) akun saya menunjukkan tren pertumbuhan yang positif dan konsisten.'},{id:'Y1.3',text:'Banyak audiens yang mengklik keranjang kuning dan melakukan pembelian melalui tautan afiliasi saya.'},{id:'Y1.4',text:'Saya sering menerima notifikasi komisi yang menandakan penjualan berhasil melalui konten saya.'},{id:'Y1.5',text:'Secara finansial, pendapatan komisi dari TikTok Affiliate memenuhi ekspektasi saya.'},{id:'Y1.6',text:'Saya merasa strategi konten yang saya terapkan secara keseluruhan berhasil dalam mencapai tujuan pemasaran saya.'}] };
+        const personas = {
+            visioner_ai: { title: "SANG VISIONER AI", icon: `<svg class="w-24 h-24 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.6.11.82-.26.82-.57v-2.1c-2.78.6-3.37-1.34-3.37-1.34-.55-1.38-1.34-1.75-1.34-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.3.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.23 1.92 1.23 3.22 0 4.61-2.8 5.63-5.48 5.93.43.37.82 1.1.82 2.22v3.29c0 .31.22.69.82.57A10 10 0 0 0 22 12 10 10 0 0 0 12 2z"></path></svg>`, color: "blue", description: "Anda adalah kreator yang seimbang! Mahir memanfaatkan teknologi AI canggih untuk mengeksekusi ide-ide kreatif brilian Anda. Kombinasi sempurna antara otak dan seni!" },
+            seniman_murni: { title: "SANG SENIMAN MURNI", icon: `<svg class="w-24 h-24 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-1.5"></path><path d="M4 21l-1-1 7-7 1 1-7 7z"></path><path d="M14 1l3 3"></path><path d="M9 8l-2 2"></path></svg>`, color: "red", description: "Kekuatan utama Anda adalah ide orisinal dan sentuhan personal yang otentik. Kreativitas Anda tidak ada batasnya, dan audiens menyukai orisinalitas Anda!" },
+            teknisi_efisien: { title: "SANG TEKNISI EFISIEN", icon: `<svg class="w-24 h-24 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2m0 16v2m8.07-6.07l-1.42 1.42M5.35 5.35L3.93 3.93m16.14 0l-1.42 1.42M3.93 20.07l1.42-1.42M22 12h-2m-2 0h-2m-2 0H8m-2 0H2"></path><circle cx="12" cy="12" r="3"></circle></svg>`, color: "green", description: "Anda adalah master produktivitas! Anda tahu cara menggunakan alat yang tepat untuk menghasilkan konten secara cepat, data-driven, dan sangat efektif. Efisiensi adalah nama tengah Anda!" },
+            kreator_hibrida: { title: "SANG KREATOR HIBRIDA", icon: `<svg class="w-24 h-24 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>`, color: "yellow", description: "Anda cerdas dan adaptif! Anda tahu kapan harus mengandalkan data dari AI dan kapan harus mengikuti intuisi kreatif Anda. Fleksibilitas adalah kekuatan super Anda!" }
+        };
+        const personaColors = { blue: { bg: 'bg-blue-100', text: 'text-blue-800' }, red: { bg: 'bg-red-100', text: 'text-red-800' }, green: { bg: 'bg-green-100', text: 'text-green-800' }, yellow: { bg: 'bg-yellow-100', text: 'text-yellow-800' }};
 
-        const getAnalysisBtn = document.getElementById('get-analysis-btn');
-        const aiResultContainer = document.getElementById('ai-result-container');
-        const aiLoadingSpinner = document.getElementById('ai-loading-spinner');
-        const btnText = document.getElementById('btn-text');
-        const aiErrorMessage = document.getElementById('ai-error-message');
-        
-        let allTransactions = [];
-
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-        }
-
-        function formatTanggal(isoString) {
-            if (!isoString) return '';
-            const date = new Date(isoString);
-            const options = { day: '2-digit', month: 'short', year: '2-digit' };
-            // Menggunakan 'id-ID' untuk format lokal Indonesia (misal: 07 Agu 25)
-            return date.toLocaleDateString('id-ID', options).replace(/\./g, '');
-        }
-
-        function showTableLoading(tbody) {
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4"><div class="flex justify-center items-center text-sm text-gray-500"><div class="table-spinner w-4 h-4 border-2 border-gray-300 rounded-full mr-2"></div>Memuat...</div></td></tr>`;
-        }
-
-        function populateTable(tbodyEl, data, jenis, emptyMessage) {
-            tbodyEl.innerHTML = '';
-            if (data.length === 0) {
-                tbodyEl.innerHTML = `<tr><td colspan="4" class="px-4 py-3 text-center text-sm text-gray-500">${emptyMessage}</td></tr>`;
-                return;
-            }
-
-            const sortedData = [...data].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-
-            sortedData.forEach(transaction => {
-                const row = document.createElement('tr');
-                row.id = `trx-${transaction.id}`;
-                const isPemasukan = transaction.jenis === 'pemasukan';
-                row.innerHTML = `
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${formatTanggal(transaction.tanggal)}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">${transaction.deskripsi}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium ${isPemasukan ? 'text-green-600' : 'text-red-600'}">${formatRupiah(transaction.nominal)}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                        <button onclick="deleteTransaction('${transaction.id}', '${transaction.jenis}')" class="text-red-600 hover:text-red-900">Hapus</button>
-                    </td>
-                `;
-                tbodyEl.appendChild(row);
-            });
-        }
-
-        function renderTransactions() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const todayTransactions = allTransactions.filter(t => {
-                const transactionDate = new Date(t.tanggal);
-                transactionDate.setHours(0, 0, 0, 0);
-                return transactionDate.getTime() === today.getTime();
-            });
-            const pemasukanHariIni = todayTransactions.filter(t => t.jenis === 'pemasukan');
-            const pengeluaranHariIni = todayTransactions.filter(t => t.jenis === 'pengeluaran');
-            populateTable(pemasukanListTodayEl, pemasukanHariIni, 'pemasukan', 'Tidak ada pemasukan hari ini.');
-            populateTable(pengeluaranListTodayEl, pengeluaranHariIni, 'pengeluaran', 'Tidak ada pengeluaran hari ini.');
-
-            const semuaPemasukan = allTransactions.filter(t => t.jenis === 'pemasukan');
-            const semuaPengeluaran = allTransactions.filter(t => t.jenis === 'pengeluaran');
-            populateTable(pemasukanListAllEl, semuaPemasukan, 'pemasukan', 'Belum ada riwayat pemasukan.');
-            populateTable(pengeluaranListAllEl, semuaPengeluaran, 'pengeluaran', 'Belum ada riwayat pengeluaran.');
-        }
-
-        function updateSummary() {
-            const pemasukan = allTransactions.filter(t => t.jenis === 'pemasukan').reduce((acc, t) => acc + t.nominal, 0);
-            const pengeluaran = allTransactions.filter(t => t.jenis === 'pengeluaran').reduce((acc, t) => acc + t.nominal, 0);
-            const saldo = pemasukan - pengeluaran;
-            totalPemasukanEl.textContent = formatRupiah(pemasukan);
-            totalPengeluaranEl.textContent = formatRupiah(pengeluaran);
-            saldoAkhirEl.textContent = formatRupiah(saldo);
-        }
-
-        async function fetchTransactions() {
-            showTableLoading(pemasukanListTodayEl);
-            showTableLoading(pengeluaranListTodayEl);
-            showTableLoading(pemasukanListAllEl);
-            showTableLoading(pengeluaranListAllEl);
-            try {
-                const response = await fetch(GOOGLE_SHEET_API_URL);
-                if (!response.ok) throw new Error('Gagal mengambil data dari Google Sheets.');
-                allTransactions = await response.json();
-                renderTransactions();
-                updateSummary();
-            } catch (error) {
-                const errorHtml = `<tr><td colspan="4" class="text-center p-4 text-red-600 text-sm">${error.message}</td></tr>`;
-                pemasukanListTodayEl.innerHTML = errorHtml;
-                pengeluaranListTodayEl.innerHTML = errorHtml;
-                pemasukanListAllEl.innerHTML = errorHtml;
-                pengeluaranListAllEl.innerHTML = errorHtml;
-            }
-        }
-
-        async function addTransaction(e) {
-            e.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Menyimpan...';
-
-            const newTransaction = {
-                action: 'add',
-                deskripsi: document.getElementById('deskripsi').value,
-                nominal: parseFloat(document.getElementById('nominal').value),
-                jenis: document.getElementById('jenis').value
-            };
-
-            try {
-                await fetch(GOOGLE_SHEET_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(newTransaction),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                });
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                await fetchTransactions();
-                transactionForm.reset();
-            } catch (error) {
-                alert(`Gagal menyimpan: ${error.message}`);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Simpan Transaksi';
-            }
-        }
-
-        async function deleteTransaction(id, jenis) {
-            if (!confirm('Apakah Anda yakin ingin menghapus transaksi ini?')) return;
-            
-            const row = document.getElementById(`trx-${id}`);
-            row.classList.add('deleting');
-            try {
-                await fetch(GOOGLE_SHEET_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({ action: 'delete', id: id, jenis: jenis }),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                });
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                await fetchTransactions();
-            } catch (error) {
-                alert(`Gagal menghapus: ${error.message}`);
-                row.classList.remove('deleting');
-            }
-        }
-        
-        async function getAiAnalysis() {
-            aiErrorMessage.classList.add('hidden');
-            if (allTransactions.length < 3) {
-                aiResultContainer.innerHTML = 'Mohon miliki minimal 3 transaksi (total) untuk analisis.';
-                return;
-            }
-
-            getAnalysisBtn.disabled = true;
-            aiLoadingSpinner.classList.remove('hidden');
-            btnText.textContent = 'Menganalisis...';
-            
-            const formattedTransactions = allTransactions.map(t => `- ${t.jenis}: ${t.deskripsi} (${formatRupiah(t.nominal)})`).join('\n');
-            const prompt = `Anda adalah seorang konsultan bisnis UMKM di Indonesia. Berdasarkan data transaksi ini:\n${formattedTransactions}\n\nBerikan:\n1. Analisis singkat kondisi keuangan (maks 2 kalimat).\n2. Tiga (3) tips konkret dalam format daftar bernomor untuk meningkatkan usaha.\nSampaikan dengan bahasa yang positif dan mudah dipahami. Jangan gunakan markdown tebal atau miring.`;
-
-            try {
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) throw new Error(`API request failed`);
-                const result = await response.json();
-                if (result.candidates && result.candidates[0]) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    aiResultContainer.innerHTML = text.replace(/\n/g, '<br>');
-                } else {
-                    throw new Error("Respons dari AI tidak valid.");
+        function renderQuestions() {
+            const createQuestionRow = (q) => {
+                let html = `<div class="col-span-7 sm:col-span-2 text-sm">${q.id}: ${q.text}</div>`;
+                for (let i = 1; i <= 5; i++) {
+                    html += `<div class="flex justify-center"><input type="radio" name="${q.id}" value="${i}" class="form-radio" required></div>`;
                 }
-            } catch (error) {
-                aiErrorMessage.textContent = "Maaf, terjadi kesalahan saat menghubungi AI.";
-                aiErrorMessage.classList.remove('hidden');
-            } finally {
-                getAnalysisBtn.disabled = false;
-                aiLoadingSpinner.classList.add('hidden');
-                btnText.textContent = 'Dapatkan Analisis';
-            }
+                return html;
+            };
+            document.getElementById('x1-questions').innerHTML = questions.x1.map(createQuestionRow).join('<hr class="col-span-7 my-2 border-gray-200">');
+            document.getElementById('x2-questions').innerHTML = questions.x2.map(createQuestionRow).join('<hr class="col-span-7 my-2 border-gray-200">');
+            document.getElementById('y-questions').innerHTML = questions.y.map(createQuestionRow).join('<hr class="col-span-7 my-2 border-gray-200">');
         }
-        
-        document.addEventListener('DOMContentLoaded', fetchTransactions);
-        transactionForm.addEventListener('submit', addTransaction);
-        getAnalysisBtn.addEventListener('click', getAiAnalysis);
+
+        // --- INSIALISASI DAN EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestions();
+
+            // --- Logika Screening ---
+            const screeningInputs = document.querySelectorAll('#screeningQuestions input[type="radio"]');
+            const mainQuestionnaire = document.getElementById('mainQuestionnaire');
+            const screeningError = document.getElementById('screening_error');
+
+            function checkScreening() {
+                const isAffiliate = document.querySelector('input[name="is_affiliate"]:checked');
+                const domicile = document.querySelector('input[name="domicile"]:checked');
+                if (isAffiliate && domicile) {
+                    if (isAffiliate.value === 'Ya' && domicile.value === 'Ya') {
+                        mainQuestionnaire.classList.remove('hidden');
+                        screeningError.classList.add('hidden');
+                    } else {
+                        mainQuestionnaire.classList.add('hidden');
+                        screeningError.classList.remove('hidden');
+                    }
+                }
+            }
+            screeningInputs.forEach(input => input.addEventListener('change', checkScreening));
+            
+            // --- Logika Giveaway ---
+            const giveawayCheckbox = document.getElementById('giveaway_consent');
+            const giveawayContactDiv = document.getElementById('giveawayContact');
+            giveawayCheckbox.addEventListener('change', () => {
+                giveawayContactDiv.classList.toggle('hidden', !giveawayCheckbox.checked);
+                document.getElementById('giveaway_contact').required = giveawayCheckbox.checked;
+            });
+
+            // --- Logika Form & Persona ---
+            const form = document.getElementById('researchForm');
+            const kuesionerPanel = document.getElementById('kuesionerPanel');
+            const resultsPanel = document.getElementById('resultsPanel');
+            const personaResultDiv = document.getElementById('personaResult');
+            const messageDiv = document.getElementById('message');
+            const submitButton = document.getElementById('submitButton');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            function calculateAndShowPersona(formData) {
+                let totalX1 = 0, countX1 = 0;
+                let totalX2 = 0, countX2 = 0;
+                questions.x1.forEach(q => { const value = parseInt(formData.get(q.id)); if (!isNaN(value)) { totalX1 += value; countX1++; } });
+                questions.x2.forEach(q => { const value = parseInt(formData.get(q.id)); if (!isNaN(value)) { totalX2 += value; countX2++; } });
+                const avgX1 = countX1 > 0 ? totalX1 / countX1 : 0;
+                const avgX2 = countX2 > 0 ? totalX2 / countX2 : 0;
+                let persona;
+                if (avgX1 > 3.0 && avgX2 > 3.0) persona = personas.visioner_ai;
+                else if (avgX1 <= 3.0 && avgX2 > 3.0) persona = personas.seniman_murni;
+                else if (avgX1 > 3.0 && avgX2 <= 3.0) persona = personas.teknisi_efisien;
+                else persona = personas.kreator_hibrida;
+                personaResultDiv.innerHTML = `${persona.icon}<h2 class="font-title text-4xl text-gray-800 mb-2">${persona.title}</h2><p class="font-bold text-gray-700">${persona.description}</p>`;
+                const colors = personaColors[persona.color];
+                messageDiv.textContent = 'MISI SELESAI! Jawabanmu sudah terekam. Terima kasih banyak!';
+                messageDiv.className = `mt-6 p-4 rounded-lg text-center font-bold text-lg border-4 border-gray-900 ${colors.bg} ${colors.text}`;
+                kuesionerPanel.classList.add('hidden');
+                resultsPanel.classList.remove('hidden');
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                submitButton.disabled = true;
+                buttonText.textContent = 'MENGIRIM...';
+                loadingSpinner.classList.remove('hidden');
+                const formData = new FormData(form);
+                const dataObject = Object.fromEntries(formData.entries());
+                dataObject.timestamp = new Date().toLocaleString("id-ID", {timeZone: "Asia/Jakarta"});
+                const checkedTools = Array.from(document.querySelectorAll('input[name="ai_tools"]:checked')).map(cb => cb.value);
+                dataObject.ai_tools_used = checkedTools.join(', ');
+                delete dataObject.ai_tools;
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(dataObject) })
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    if(data.result === "success"){
+                        calculateAndShowPersona(formData);
+                    } else {
+                         throw new Error(data.error || 'Terjadi kesalahan dari server.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    messageDiv.textContent = 'Yah, gagal kirim data nih. Cek koneksi internet, terus coba lagi ya!';
+                    messageDiv.className = 'block mt-6 p-4 rounded-lg text-center font-bold text-lg border-4 border-gray-900 bg-red-200 text-red-800';
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    buttonText.textContent = 'KIRIM JAWABAN!';
+                    loadingSpinner.classList.add('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+        });
     </script>
 </body>
 </html>
+
