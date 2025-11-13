@@ -82,11 +82,36 @@
 
           <hr class="border-dashed" />
 
+          <!-- [PERBAIKAN] Mengembalikan bagian "Pilihan Produk" yang hilang -->
           <div>
             <h2 class="text-lg font-semibold text-gray-800 mb-3">Pilihan Produk</h2>
             <p class="text-sm text-gray-500 mb-4">Atur jumlah produk yang ingin dipesan. Gunakan tombol + / - untuk pengalaman yang nyaman.</p>
+            
+            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Produk akan dirender oleh JavaScript di sini -->
+            </div>
+          </div>
+          
+          <!-- [PENAMBAHAN] Tambahan <hr> untuk memisahkan bagian -->
+          <hr class="border-dashed" />
 
-            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          <!-- [PENAMBAHAN] Metode Pembayaran -->
+          <div>
+            <label class="block text-lg font-semibold text-gray-800 mb-3">Metode Pembayaran <span class="text-red-500">*</span></label>
+            <div class="mt-2 space-y-3">
+              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
+                <input id="pay_cod" name="metode_pembayaran" type="radio" value="COD (Bayar di Tempat)" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <label for="pay_cod" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">COD (Bayar di Tempat)</label>
+              </div>
+              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
+                <input id="pay_transfer" name="metode_pembayaran" type="radio" value="Transfer Bank" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <label for="pay_transfer" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">Transfer Bank</label>
+              </div>
+              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
+                <input id="pay_ewallet" name="metode_pembayaran" type="radio" value="E-Wallet (OVO/GoPay)" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <label for="pay_ewallet" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">E-Wallet (OVO/GoPay)</label>
+              </div>
+            </div>
           </div>
 
           <div class="flex items-center justify-between">
@@ -129,7 +154,7 @@
     </main>
 
     <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6">
+    <div id="success-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mx-auto mb-4">
           <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -139,6 +164,20 @@
         <div class="mt-6 grid grid-cols-2 gap-3">
           <button id="closeModalBtn" class="px-3 py-2 border rounded-lg shadow-md hover:shadow-lg active:shadow-inner">Tutup</button>
           <button id="modalOkBtn" class="px-3 py-2 rounded-lg text-white btn-accent shadow-md hover:shadow-lg active:shadow-md">Lihat Pesanan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [PENAMBAHAN] Error Modal -->
+    <div id="error-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto mb-4">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h4 class="text-xl font-semibold text-gray-800">Gagal Mengirim!</h4>
+        <p id="error-message" class="text-gray-600 mt-2">Terjadi kesalahan. Silakan coba lagi nanti.</p>
+        <div class="mt-6">
+          <button id="closeErrorModalBtn" class="w-full px-3 py-2 border rounded-lg shadow-md hover:shadow-lg active:shadow-inner">Tutup</button>
         </div>
       </div>
     </div>
@@ -182,6 +221,11 @@
     </div>
 
     <script>
+    // ==== [PENAMBAHAN] KONFIGURASI GOOGLE SCRIPT ====
+    // GANTI URL INI dengan URL Web App Anda dari Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys87AzeEcNEFuq4d0y0J3nZJLRM08h3twlBXYiW73Fwg75qsJ8gz9aYeEzA-rA_I95/exec";
+    // ============================================
+
     // --- Produk (menghapus produk kecantikan yang diminta) ---
     const products = [
       { id: 'br001', name: 'BR001 – HP', price: 1000000, formattedPrice: 'Rp1.000.000', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></rect><path d="M8 21h8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>' },
@@ -198,6 +242,15 @@
     const successModal = document.getElementById('success-modal');
     const openModalBtn = document.getElementById('openModalBtn');
     const resetBtn = document.getElementById('resetBtn');
+
+    // [PENAMBAHAN] Elemen Error Modal
+    const errorModal = document.getElementById('error-modal');
+    const errorMessageEl = document.getElementById('error-message');
+    const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
+    
+    // [PENAMBAHAN] Elemen Tombol Submit Utama
+    const submitBtn = document.getElementById('submitBtn');
+    const mobileSubmitBtn = document.querySelector('.lg\\:hidden button[type="submit"]');
 
     // [PENAMBAHAN] Elemen DOM untuk Chat
     const openChatBtn = document.getElementById('openChatBtn');
@@ -360,6 +413,11 @@
 
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between';
+          // [MODIFIKASI] Menyimpan data lengkap produk untuk dikirim
+          row.dataset.id = product.id;
+          row.dataset.name = product.name;
+          row.dataset.qty = qty;
+          row.dataset.subtotal = sub;
           row.innerHTML = `<div class=\"text-sm text-gray-700 truncate\">${product.name} × ${qty}</div><div class=\"text-sm font-medium\">${formatCurrency(sub)}</div>`;
           summaryItemsEl.appendChild(row);
         }
@@ -379,44 +437,170 @@
     });
 
     openModalBtn.addEventListener('click', ()=>{
-      successModal.classList.remove('hidden');
-      successModal.classList.add('flex');
+      // [MODIFIKASI] Hanya tampilkan modal jika form valid
+      if (validateForm()) {
+        successModal.classList.remove('hidden');
+        successModal.classList.add('flex');
+      }
     });
 
     document.getElementById('closeModalBtn').addEventListener('click', ()=>{successModal.classList.add('hidden');successModal.classList.remove('flex')});
-    document.getElementById('modalOkBtn').addEventListener('click', ()=>{window.scrollTo({top:0,behavior:'smooth'});successModal.classList.add('hidden');successModal.classList.remove('flex')});
+    
+    // [MODIFIKASI] Tombol OK di modal sukses sekarang akan memicu submit
+    document.getElementById('modalOkBtn').addEventListener('click', () => {
+      submitForm();
+      successModal.classList.add('hidden');
+      successModal.classList.remove('flex');
+    });
+    
+    // [PENAMBAHAN] Tombol tutup error modal
+    closeErrorModalBtn.addEventListener('click', () => {
+      errorModal.classList.add('hidden');
+      errorModal.classList.remove('flex');
+    });
 
-    orderForm.addEventListener('submit', function(e){
-      e.preventDefault();
+    // [PENAMBAHAN] Fungsi validasi form terpisah
+    function validateForm() {
       const required = ['nama','email','no_wa','alamat'];
+      let isValid = true;
       for(const id of required){
         const el = document.getElementById(id);
+        // Hapus error lama
+        el.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+        
         if(!el.value.trim()){
-          // Mengganti 'alert' dengan highlight field yang error
+          isValid = false;
           el.focus();
           el.classList.add('border-red-500', 'ring-2', 'ring-red-200');
-          // Hapus error style saat pengguna mulai mengetik
           el.addEventListener('input', () => {
             el.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
           }, { once: true });
-          return; // Menghentikan pengiriman
+          
+          // Hentikan di error pertama
+          return false; 
         }
       }
+
+      // [PENAMBAHAN] Validasi Metode Pembayaran (Radio)
+      const paymentMethod = document.querySelector('input[name="metode_pembayaran"]:checked');
+      const paymentLabel = document.querySelector('input[name="metode_pembayaran"]').closest('div').parentElement.previousElementSibling;
+      paymentLabel.classList.remove('text-red-500'); // Hapus error lama
+
+      if (!paymentMethod) {
+        isValid = false;
+        
+        // Beri highlight sederhana di bagian ini
+        paymentLabel.classList.add('text-red-500');
+        
+        // Tambahkan event listener untuk menghapus error
+        document.querySelectorAll('input[name="metode_pembayaran"]').forEach(radio => {
+          radio.addEventListener('change', () => {
+            paymentLabel.classList.remove('text-red-500');
+          }, { once: true });
+        });
+        
+        // Scroll ke bagian error
+        paymentLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      
+      return isValid;
+    }
+    
+    // [MODIFIKASI] Event listener submit utama
+    orderForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      // Validasi dulu
+      if (validateForm()) {
+        // [PERBAIKAN] Jangan langsung kirim, tapi tampilkan modal konfirmasi
+        successModal.classList.remove('hidden');
+        successModal.classList.add('flex');
+      }
+    });
+
+    // [PENAMBAHAN] Fungsi submitForm yang menangani fetch
+    function submitForm() {
+      // Tampilkan status loading di tombol
+      setLoading(true);
 
       const formData = new FormData(orderForm);
       const order = {};
       for(const [k,v] of formData.entries()) order[k]=v;
-      order.cart = Array.from(document.querySelectorAll('.product-input')).map(i=>({id:i.id, qty: Number(i.value)})).filter(x=>x.qty>0);
+      
+      // Ambil data keranjang dari elemen ringkasan
+      order.cart = [];
+      summaryItemsEl.querySelectorAll('div[data-id]').forEach(item => {
+        order.cart.push({
+          id: item.dataset.id,
+          name: item.dataset.name,
+          qty: parseInt(item.dataset.qty),
+          subtotal: parseFloat(item.dataset.subtotal)
+        });
+      });
+      
+      // Cek jika URL sudah diisi
+      if (SCRIPT_URL === "URL_APPS_SCRIPT_ANDA_DI_SINI") {
+        showError("URL Apps Script belum diatur. Edit file HTML terlebih dahulu.");
+        setLoading(false);
+        return;
+      }
 
-      console.log('Order ready to send:', order);
+      // Kirim data ke Google Apps Script
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'cors', // Penting untuk request antar domain
+        body: JSON.stringify(order)
+      })
+      .then(response => response.json())
+      .then(data => {
+        setLoading(false);
+        if (data.status === 'success') {
+          // Tampilkan modal sukses (yang asli)
+          successModal.classList.remove('hidden');
+          successModal.classList.add('flex');
+          // Ganti fungsi tombol OK agar hanya menutup (karena sudah sukses)
+          document.getElementById('modalOkBtn').onclick = () => {
+            successModal.classList.add('hidden');
+            successModal.classList.remove('flex');
+          };
 
-      successModal.classList.remove('hidden');
-      successModal.classList.add('flex');
+          // Bersihkan form
+          orderForm.reset();
+          document.querySelectorAll('.product-input').forEach(i=>i.value=0);
+          updateTotal();
+        } else {
+          // Tampilkan modal error jika Google Script mengembalikan error
+          showError(data.message || 'Terjadi kesalahan di server.');
+        }
+      })
+      .catch(error => {
+        // Tampilkan modal error jika fetch gagal (misal: jaringan)
+        setLoading(false);
+        showError('Gagal terhubung ke server: ' + error.message);
+      });
+    }
 
-      orderForm.reset();
-      document.querySelectorAll('.product-input').forEach(i=>i.value=0);
-      updateTotal();
-    });
+    // [PENAMBAHAN] Fungsi untuk menampilkan/menyembunyikan loading
+    function setLoading(isLoading) {
+      if (isLoading) {
+        submitBtn.disabled = true;
+        mobileSubmitBtn.disabled = true;
+        submitBtn.textContent = 'Mengirim...';
+        mobileSubmitBtn.textContent = 'Mengirim...';
+      } else {
+        submitBtn.disabled = false;
+        mobileSubmitBtn.disabled = false;
+        submitBtn.textContent = 'Kirim Pesanan';
+        mobileSubmitBtn.textContent = 'Kirim Pesanan';
+      }
+    }
+
+    // [PENAMBAHAN] Fungsi untuk menampilkan error modal
+    function showError(message) {
+      errorMessageEl.textContent = message;
+      errorModal.classList.remove('hidden');
+      errorModal.classList.add('flex');
+    }
 
     // Event listener untuk Tema Gelap telah dihapus
     
