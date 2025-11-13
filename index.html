@@ -11,29 +11,21 @@
       --accent-start: 53 80 255; /* indigo-500 */
       --accent-end: 124 58 237;  /* violet-600 */
     }
-    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;}
-    /* Hide number input arrows */
+    body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);}    
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
     input[type=number]{-moz-appearance:textfield;appearance:textfield}
     :focus{outline: none}
-    .focus-ring:focus{box-shadow:0 8px 24px rgba(0,0,0,0.06), 0 0 0 6px rgba(var(--accent-start),0.08);}
-
-    /* Color grading: soft glass cards with subtle gradient accent */
+    .focus-ring:focus{box-shadow:0 8px 24px rgba(0,0,0,0.06), 0 0 0 6px rgba(var(--accent-start),0.08);}    
     .card-accent{background:linear-gradient(135deg, rgba(var(--accent-start),0.06), rgba(var(--accent-end),0.04)); border:1px solid rgba(99,102,241,0.06)}
     .btn-accent{background:linear-gradient(90deg, rgb(var(--accent-start)), rgb(var(--accent-end)));}
-
-    /* Product icon container */
     .prod-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center}
-
-    /* [PENAMBAHAN] Styling untuk Chat */
-    .chat-user { display: flex; justify-content: flex-end; margin-bottom: 0.75rem; }
-    .chat-ai { display: flex; justify-content: flex-start; margin-bottom: 0.75rem; }
-
+    .hidden-by-js{display:none !important}
+    pre.confirm-text{white-space:pre-wrap; text-align:left;}
   </style>
 </head>
-<body class="min-h-screen p-6 bg-gray-50">
+<body class="min-h-screen p-6">
   <div class="max-w-6xl mx-auto">
-    <header class="mb-8 flex items-center justify-between bg-white p-6 rounded-2xl shadow-xl card-accent">
+    <header class="mb-8 flex items-center justify-between">
       <div class="flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl prod-icon" style="background:linear-gradient(135deg, rgba(var(--accent-start),0.15), rgba(var(--accent-end),0.12)); box-shadow: 0 8px 24px rgba(99,102,241,0.08);">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-700" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7v10a2 2 0 0 0 2 2h14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 7h10v-3a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v3z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -43,74 +35,64 @@
           <p class="text-sm text-gray-500">Pilih produk, atur jumlah, lalu kirim pesanan Anda.</p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <!-- Tombol Tema Gelap telah dihapus -->
-      </div>
     </header>
 
     <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Form area -->
       <section class="lg:col-span-2">
-        <form id="orderForm" class="space-y-8 bg-white rounded-2xl p-6 shadow-xl card-accent">
+        <form id="orderForm" class="space-y-8 bg-white rounded-2xl p-6 shadow-lg card-accent" novalidate>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label for="nama" class="block text-sm font-medium text-gray-700">Nama <span class="text-red-500">*</span></label>
-              <input id="nama" name="nama" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100" placeholder="Nama lengkap" />
+              <input id="nama" name="nama" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring" placeholder="Nama lengkap" />
             </div>
             <div>
               <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-              <input id="email" name="email" type="email" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100" placeholder="nama@contoh.com"/>
+              <input id="email" name="email" type="email" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring" placeholder="nama@contoh.com"/>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label for="no_wa" class="block text-sm font-medium text-gray-700">No. WA <span class="text-red-500">*</span></label>
-              <input id="no_wa" name="no_wa" type="tel" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100" placeholder="08xxxxxxxxxx"/>
+              <input id="no_wa" name="no_wa" type="tel" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring" placeholder="08xxxxxxxxxx"/>
             </div>
             <div>
               <label for="kota" class="block text-sm font-medium text-gray-700">Kota</label>
-              <input id="kota" name="kota" class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100" placeholder="Kota tujuan"/>
+              <input id="kota" name="kota" class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring" placeholder="Kota tujuan"/>
             </div>
           </div>
 
           <div>
             <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat Pengiriman <span class="text-red-500">*</span></label>
-            <textarea id="alamat" name="alamat" rows="4" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100" placeholder="Alamat lengkap (jalan, RT/RW, kode pos)"></textarea>
+            <textarea id="alamat" name="alamat" rows="4" required class="mt-2 w-full p-3 border border-gray-200 rounded-lg focus-ring" placeholder="Alamat lengkap (jalan, RT/RW, kode pos)"></textarea>
           </div>
 
           <hr class="border-dashed" />
 
-          <!-- [PERBAIKAN] Mengembalikan bagian "Pilihan Produk" yang hilang -->
           <div>
             <h2 class="text-lg font-semibold text-gray-800 mb-3">Pilihan Produk</h2>
             <p class="text-sm text-gray-500 mb-4">Atur jumlah produk yang ingin dipesan. Gunakan tombol + / - untuk pengalaman yang nyaman.</p>
-            
-            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Produk akan dirender oleh JavaScript di sini -->
-            </div>
-          </div>
-          
-          <!-- [PENAMBAHAN] Tambahan <hr> untuk memisahkan bagian -->
-          <hr class="border-dashed" />
 
-          <!-- [PENAMBAHAN] Metode Pembayaran -->
-          <div>
+            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+
+          <!-- Metode Pembayaran (selalu ada) -->
+          <div id="payment-section">
             <label class="block text-lg font-semibold text-gray-800 mb-3">Metode Pembayaran <span class="text-red-500">*</span></label>
-            <div class="mt-2 space-y-3">
-              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
-                <input id="pay_cod" name="metode_pembayaran" type="radio" value="COD (Bayar di Tempat)" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <label for="pay_cod" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">COD (Bayar di Tempat)</label>
-              </div>
-              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
-                <input id="pay_transfer" name="metode_pembayaran" type="radio" value="Transfer Bank" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <label for="pay_transfer" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">Transfer Bank</label>
-              </div>
-              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg has-[:checked]:bg-indigo-50 has-[:checked]:border-indigo-300 transition-all">
-                <input id="pay_ewallet" name="metode_pembayaran" type="radio" value="E-Wallet (OVO/GoPay)" required class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <label for="pay_ewallet" class="block text-sm font-medium text-gray-700 w-full cursor-pointer">E-Wallet (OVO/GoPay)</label>
-              </div>
+            <div id="payment-options" class="mt-2 space-y-3">
+              <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg transition-all">
+                <input id="pay_cod" name="metode_pembayaran" type="radio" value="COD (Bayar di Tempat)" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <span class="block text-sm font-medium text-gray-700">COD (Bayar di Tempat)</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg transition-all">
+                <input id="pay_transfer" name="metode_pembayaran" type="radio" value="Transfer Bank" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <span class="block text-sm font-medium text-gray-700">Transfer Bank</span>
+              </label>
+              <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg transition-all">
+                <input id="pay_ewallet" name="metode_pembayaran" type="radio" value="E-Wallet (OVO/GoPay)" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                <span class="block text-sm font-medium text-gray-700">E-Wallet (OVO/GoPay)</span>
+              </label>
             </div>
           </div>
 
@@ -120,20 +102,18 @@
           </div>
 
           <div class="hidden lg:flex justify-end">
-            <button id="submitBtn" type="submit" class="px-6 py-3 rounded-lg text-white font-semibold shadow-lg btn-accent hover:shadow-xl active:shadow-md transition-all duration-150">Kirim Pesanan</button>
+            <button id="submitBtn" type="button" class="px-6 py-3 rounded-lg text-white font-semibold shadow-lg btn-accent">Kirim Pesanan</button>
           </div>
 
-          <!-- mobile submit -->
           <div class="lg:hidden">
-            <button type="submit" class="w-full px-6 py-3 rounded-lg text-white font-semibold shadow-lg btn-accent hover:shadow-xl active:shadow-md transition-all duration-150">Kirim Pesanan</button>
+            <button id="mobileSubmit" type="button" class="w-full px-6 py-3 rounded-lg text-white font-semibold shadow-lg btn-accent">Kirim Pesanan</button>
           </div>
 
         </form>
       </section>
 
-      <!-- Summary / Sidebar -->
       <aside class="sticky top-6">
-        <div class="bg-white rounded-2xl p-5 shadow-xl card-accent">
+        <div class="bg-white rounded-2xl p-5 shadow-lg card-accent">
           <h3 class="text-lg font-semibold text-gray-800">Ringkasan Pesanan</h3>
           <div class="mt-4 space-y-3" id="summary-items">
             <p class="text-sm text-gray-500">Belum ada produk dipilih.</p>
@@ -145,30 +125,30 @@
               <div id="total-price" class="text-xl font-bold text-indigo-600">Rp0</div>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-3">
-              <button id="resetBtn" class="px-3 py-2 border rounded-lg text-sm shadow-md hover:shadow-lg active:shadow-inner">Reset</button>
-              <button id="openModalBtn" class="px-3 py-2 rounded-lg text-sm text-white btn-accent shadow-md hover:shadow-lg active:shadow-md">Pratinjau & Kirim</button>
+              <button id="resetBtn" class="px-3 py-2 border rounded-lg text-sm">Reset</button>
+              <button id="openModalBtn" class="px-3 py-2 rounded-lg text-sm text-white btn-accent">Pratinjau & Kirim</button>
             </div>
           </div>
         </div>
       </aside>
     </main>
 
-    <!-- Success Modal -->
+    <!-- Success Modal (confirmation before sending) -->
     <div id="success-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mx-auto mb-4">
           <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
         </div>
-        <h4 class="text-xl font-semibold text-gray-800">Pesanan Terkirim!</h4>
-        <p class="text-gray-600 mt-2">Terima kasih. Kami telah menerima pesanan Anda dan akan memprosesnya segera.</p>
+        <h4 class="text-xl font-semibold text-gray-800">Konfirmasi Pesanan</h4>
+        <p id="confirm-summary" class="text-gray-600 mt-2">Periksa kembali pesanan Anda sebelum mengirim.</p>
         <div class="mt-6 grid grid-cols-2 gap-3">
-          <button id="closeModalBtn" class="px-3 py-2 border rounded-lg shadow-md hover:shadow-lg active:shadow-inner">Tutup</button>
-          <button id="modalOkBtn" class="px-3 py-2 rounded-lg text-white btn-accent shadow-md hover:shadow-lg active:shadow-md">Lihat Pesanan</button>
+          <button id="closeModalBtn" class="px-3 py-2 border rounded-lg">Batal</button>
+          <button id="modalOkBtn" class="px-3 py-2 rounded-lg text-white btn-accent">Kirim Sekarang</button>
         </div>
       </div>
     </div>
 
-    <!-- [PENAMBAHAN] Error Modal -->
+    <!-- Error Modal -->
     <div id="error-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl text-center">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto mb-4">
@@ -177,56 +157,17 @@
         <h4 class="text-xl font-semibold text-gray-800">Gagal Mengirim!</h4>
         <p id="error-message" class="text-gray-600 mt-2">Terjadi kesalahan. Silakan coba lagi nanti.</p>
         <div class="mt-6">
-          <button id="closeErrorModalBtn" class="w-full px-3 py-2 border rounded-lg shadow-md hover:shadow-lg active:shadow-inner">Tutup</button>
+          <button id="closeErrorModalBtn" class="w-full px-3 py-2 border rounded-lg">Tutup</button>
         </div>
       </div>
     </div>
 
   </div>
 
-    <!-- [PENAMBAHAN] Tombol Chat Bubble (Floating Action Button) -->
-    <button id="openChatBtn" class="fixed bottom-6 right-6 w-16 h-16 rounded-full btn-accent shadow-xl flex items-center justify-center text-white transform hover:scale-110 active:scale-95 transition-all duration-200 z-40">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-    </button>
-
-    <!-- [PENAMBAHAN] Jendela Chat Window (Tersembunyi by default) -->
-    <div id="chatWindow" class="fixed bottom-24 right-6 w-full max-w-sm h-auto max-h-[70vh] bg-white rounded-2xl shadow-2xl flex flex-col hidden transition-all duration-300 origin-bottom-right z-50" 
-         style="transform: scale(0.95) translate-y(10px); opacity: 0;">
-      
-      <!-- Header Chat -->
-      <div class="flex items-center justify-between p-4 border-b card-accent rounded-t-2xl">
-        <h3 class="font-semibold text-gray-800">Orakel Digital</h3>
-        <button id="closeChatBtn" class="text-gray-600 hover:text-gray-900 text-2xl leading-none">&times;</button>
-      </div>
-      
-      <!-- Area Pesan -->
-      <div id="chatMessages" class="flex-1 p-4 space-y-4 overflow-y-auto h-80">
-        <!-- Pesan Awal dari AI -->
-        <div class="chat-ai">
-          <div class="p-3 bg-gray-100 rounded-lg max-w-xs shadow-sm">
-            <p class="text-sm text-gray-700">Bintang-bintang berbisik. Pertanyaan apa yang Anda bawa ke dalam kehampaan digital ini?</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Input Area -->
-      <div class="p-3 border-t bg-white rounded-b-2xl">
-        <div class="flex gap-2">
-          <input type="text" id="chatInput" placeholder="Tanyakan pada eter..." class="flex-1 p-3 border border-gray-200 rounded-lg focus-ring shadow-inner bg-gray-100">
-          <button id="sendChatBtn" class="px-4 py-3 rounded-lg text-white btn-accent shadow-md hover:shadow-lg active:shadow-md transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <script>
-    // ==== [PENAMBAHAN] KONFIGURASI GOOGLE SCRIPT ====
-    // GANTI URL INI dengan URL Web App Anda dari Google Apps Script
+  <script>
+    // === CONFIG: Google Apps Script URL (user requested to keep this exact URL) ===
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys87AzeEcNEFuq4d0y0J3nZJLRM08h3twlBXYiW73Fwg75qsJ8gz9aYeEzA-rA_I95/exec";
-    // ============================================
 
-    // --- Produk (menghapus produk kecantikan yang diminta) ---
     const products = [
       { id: 'br001', name: 'BR001 – HP', price: 1000000, formattedPrice: 'Rp1.000.000', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></rect><path d="M8 21h8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>' },
       { id: 'br002', name: 'BR002 – TV', price: 1500000, formattedPrice: 'Rp1.500.000', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></rect><path d="M8 21h8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>' },
@@ -240,128 +181,25 @@
     const summaryItemsEl = document.getElementById('summary-items');
     const orderForm = document.getElementById('orderForm');
     const successModal = document.getElementById('success-modal');
-    const openModalBtn = document.getElementById('openModalBtn');
-    const resetBtn = document.getElementById('resetBtn');
-
-    // [PENAMBAHAN] Elemen Error Modal
     const errorModal = document.getElementById('error-modal');
     const errorMessageEl = document.getElementById('error-message');
-    const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
-    
-    // [PENAMBAHAN] Elemen Tombol Submit Utama
+    const openModalBtn = document.getElementById('openModalBtn');
+    const resetBtn = document.getElementById('resetBtn');
     const submitBtn = document.getElementById('submitBtn');
-    const mobileSubmitBtn = document.querySelector('.lg\\:hidden button[type="submit"]');
-
-    // [PENAMBAHAN] Elemen DOM untuk Chat
-    const openChatBtn = document.getElementById('openChatBtn');
-    const closeChatBtn = document.getElementById('closeChatBtn');
-    const chatWindow = document.getElementById('chatWindow');
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const sendChatBtn = document.getElementById('sendChatBtn');
+    const mobileSubmit = document.getElementById('mobileSubmit');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalOkBtn = document.getElementById('modalOkBtn');
+    const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
 
     function formatCurrency(amount){
       return new Intl.NumberFormat('id-ID', {style:'currency',currency:'IDR',minimumFractionDigits:0}).format(amount).replace(/,00$/, '');
-    }
-
-    // [PENAMBAHAN] Logika Chatbot
-    
-    // Tampilkan/Sembunyikan Jendela Chat
-    openChatBtn.addEventListener('click', () => {
-      chatWindow.classList.remove('hidden');
-      setTimeout(() => { // Delay untuk memicu transisi
-        chatWindow.style.transform = 'scale(1) translateY(0)';
-        chatWindow.style.opacity = '1';
-      }, 10);
-    });
-
-    closeChatBtn.addEventListener('click', () => {
-      chatWindow.style.transform = 'scale(0.95) translateY(10px)';
-      chatWindow.style.opacity = '0';
-      setTimeout(() => {
-        chatWindow.classList.add('hidden');
-      }, 300); // Sesuaikan dengan durasi transisi
-    });
-
-    // Kirim Pesan
-    sendChatBtn.addEventListener('click', handleChatSend);
-    chatInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        handleChatSend();
-      }
-    });
-
-    function handleChatSend() {
-      const userInput = chatInput.value.trim();
-      if (userInput === '') return;
-
-      addChatMessage(userInput, 'user');
-      chatInput.value = '';
-
-      // Respon AI yang ambigu
-      setTimeout(() => {
-        const aiResponse = getAIResponse(userInput);
-        addChatMessage(aiResponse, 'ai');
-      }, 1000 + Math.random() * 500); // Simulasi waktu berpikir
-    }
-
-    // Tambahkan pesan ke UI
-    function addChatMessage(message, sender) {
-      const messageWrapper = document.createElement('div');
-      messageWrapper.className = sender === 'user' ? 'chat-user' : 'chat-ai';
-      
-      const messageBubble = document.createElement('div');
-      messageBubble.className = sender === 'user' 
-        ? 'p-3 rounded-lg text-white max-w-xs shadow-md btn-accent' 
-        : 'p-3 bg-gray-100 rounded-lg text-gray-700 max-w-xs shadow-sm';
-      
-      const messageText = document.createElement('p');
-      messageText.className = 'text-sm';
-      messageText.textContent = message;
-      
-      messageBubble.appendChild(messageText);
-      messageWrapper.appendChild(messageBubble);
-      chatMessages.appendChild(messageWrapper);
-      
-      // Auto-scroll ke bawah
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // [PENAMBAHAN] LOGIKA "ORAKEL DIGITAL" (AI AMBIGU)
-    function getAIResponse(input) {
-      const lowerInput = input.toLowerCase();
-
-      if (lowerInput.includes('harga') || lowerInput.includes('total') || lowerInput.includes('diskon')) {
-        return "Nilai adalah bayangan dari keinginan. Apa yang Anda anggap berharga sesungguhnya tidak dapat dihitung. Namun, angka-angka fana menanti di sisi kanan layar Anda.";
-      }
-      if (lowerInput.includes('produk') || lowerInput.includes('barang') || lowerInput.includes('hp') || lowerInput.includes('tv')) {
-        return "Sebuah objek hanyalah kumpulan atom yang menunggu tujuan. Tujuan apa yang Anda berikan padanya? Pilihlah dengan bijak.";
-      }
-      if (lowerInput.includes('kirim') || lowerInput.includes('alamat') || lowerInput.includes('kapan')) {
-        return "Perjalanan seribu mil dimulai dengan satu ketukan. Paket Anda akan berlayar di atas lautan digital, menuju cakrawala takdir yang telah Anda tentukan.";
-      }
-      if (lowerInput.includes('halo') || lowerInput.includes('hai') || lowerInput.includes('pagi') || lowerInput.includes('siang') || lowerInput.includes('malam')) {
-        return "Dan gema pun menjawab... Apa yang Anda harapkan dari pantulan digital ini?";
-      }
-      if (lowerInput.includes('terima kasih') || lowerInput.includes('makasih')) {
-        return "Sama-sama. Roda takdir terus berputar, begitu pula siklus transaksi ini.";
-      }
-
-      // Respon default yang ambigu
-      const randomResponses = [
-        "Awan bergeser, memperlihatkan langit yang sama. Coba tanyakan dalam bentuk yang berbeda.",
-        "Pertanyaan Anda seperti daun yang jatuh di hutan tak bertepi. Ia ada, namun maknanya tersembunyi.",
-        "Algoritma sedang merenung. Esensi dari kueri Anda masih terselubung kabut.",
-        "Fokus pada apa yang Anda cari, bukan pada apa yang Anda tanyakan. Jawabannya mungkin sudah ada di depan Anda."
-      ];
-      return randomResponses[Math.floor(Math.random() * randomResponses.length)];
     }
 
     function renderProducts(){
       productListEl.innerHTML = '';
       products.forEach(p => {
         const wrap = document.createElement('div');
-        wrap.className = 'flex items-center gap-4 p-3 border border-gray-100 rounded-xl shadow-md bg-white';
+        wrap.className = 'flex items-center gap-4 p-3 border border-gray-100 rounded-xl shadow-sm bg-white';
         wrap.innerHTML = `
           <div class="prod-icon" style="background:linear-gradient(135deg, rgba(var(--accent-start),0.06), rgba(var(--accent-end),0.04));">
             ${p.icon}
@@ -375,9 +213,9 @@
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button class="decr px-2 py-1 rounded-md border shadow-sm active:shadow-inner active:bg-gray-100 transition-all duration-100" data-id="${p.id}">-</button>
-            <input type="number" min="0" value="0" class="product-input w-16 text-center p-1 border rounded-md shadow-inner bg-gray-100" data-price="${p.price}" id="${p.id}" />
-            <button class="incr px-2 py-1 rounded-md border shadow-sm active:shadow-inner active:bg-gray-100 transition-all duration-100" data-id="${p.id}">+</button>
+            <button type="button" class="decr px-2 py-1 rounded-md border shadow-sm active:shadow-inner active:bg-gray-100 transition-all duration-100" data-id="${p.id}">-</button>
+            <input type="number" min="0" value="0" class="product-input w-16 text-center p-1 border rounded-md" data-price="${p.price}" id="${p.id}" />
+            <button type="button" class="incr px-2 py-1 rounded-md border shadow-sm active:shadow-inner active:bg-gray-100 transition-all duration-100" data-id="${p.id}">+</button>
           </div>
         `;
         productListEl.appendChild(wrap);
@@ -413,12 +251,11 @@
 
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between';
-          // [MODIFIKASI] Menyimpan data lengkap produk untuk dikirim
           row.dataset.id = product.id;
           row.dataset.name = product.name;
           row.dataset.qty = qty;
           row.dataset.subtotal = sub;
-          row.innerHTML = `<div class=\"text-sm text-gray-700 truncate\">${product.name} × ${qty}</div><div class=\"text-sm font-medium\">${formatCurrency(sub)}</div>`;
+          row.innerHTML = `<div class="text-sm text-gray-700 truncate">${product.name} × ${qty}</div><div class="text-sm font-medium">${formatCurrency(sub)}</div>`;
           summaryItemsEl.appendChild(row);
         }
       });
@@ -436,174 +273,119 @@
       updateTotal();
     });
 
-    openModalBtn.addEventListener('click', ()=>{
-      // [MODIFIKASI] Hanya tampilkan modal jika form valid
-      if (validateForm()) {
-        successModal.classList.remove('hidden');
-        successModal.classList.add('flex');
+    // Open confirmation modal (build summary)
+    function openConfirmation(){
+      const items = Array.from(summaryItemsEl.querySelectorAll('[data-id]'));
+      if(items.length === 0){
+        showError('Pilih minimal satu produk sebelum mengirim pesanan.');
+        return;
       }
-    });
 
-    document.getElementById('closeModalBtn').addEventListener('click', ()=>{successModal.classList.add('hidden');successModal.classList.remove('flex')});
-    
-    // [MODIFIKASI] Tombol OK di modal sukses sekarang akan memicu submit
-    document.getElementById('modalOkBtn').addEventListener('click', () => {
-      submitForm();
+      // Build short summary
+      const lines = items.map(it => `${it.dataset.name} × ${it.dataset.qty} — ${formatCurrency(it.dataset.subtotal)}`);
+      const totalText = document.getElementById('total-price').textContent || '';
+      document.getElementById('confirm-summary').textContent = lines.join('\n') + '\nTotal: ' + totalText;
+      successModal.classList.remove('hidden');
+      successModal.classList.add('flex');
+    }
+
+    openModalBtn.addEventListener('click', openConfirmation);
+    // Submit buttons open confirmation instead of submitting directly
+    submitBtn.addEventListener('click', openConfirmation);
+    mobileSubmit.addEventListener('click', openConfirmation);
+
+    closeModalBtn.addEventListener('click', ()=>{successModal.classList.add('hidden');successModal.classList.remove('flex')});
+
+    modalOkBtn.addEventListener('click', function(){
+      // When user confirms, perform final validation and submit
       successModal.classList.add('hidden');
       successModal.classList.remove('flex');
-    });
-    
-    // [PENAMBAHAN] Tombol tutup error modal
-    closeErrorModalBtn.addEventListener('click', () => {
-      errorModal.classList.add('hidden');
-      errorModal.classList.remove('flex');
+      submitOrder();
     });
 
-    // [PENAMBAHAN] Fungsi validasi form terpisah
-    function validateForm() {
+    closeErrorModalBtn.addEventListener('click', ()=>{errorModal.classList.add('hidden');errorModal.classList.remove('flex')});
+
+    // Final validation before sending
+    function validateFormFinal(){
       const required = ['nama','email','no_wa','alamat'];
-      let isValid = true;
       for(const id of required){
         const el = document.getElementById(id);
-        // Hapus error lama
-        el.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
-        
         if(!el.value.trim()){
-          isValid = false;
           el.focus();
-          el.classList.add('border-red-500', 'ring-2', 'ring-red-200');
-          el.addEventListener('input', () => {
-            el.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
-          }, { once: true });
-          
-          // Hentikan di error pertama
-          return false; 
+          showError('Mohon lengkapi: ' + id);
+          return false;
         }
       }
-
-      // [PENAMBAHAN] Validasi Metode Pembayaran (Radio)
-      const paymentMethod = document.querySelector('input[name="metode_pembayaran"]:checked');
-      const paymentLabel = document.querySelector('input[name="metode_pembayaran"]').closest('div').parentElement.previousElementSibling;
-      paymentLabel.classList.remove('text-red-500'); // Hapus error lama
-
-      if (!paymentMethod) {
-        isValid = false;
-        
-        // Beri highlight sederhana di bagian ini
-        paymentLabel.classList.add('text-red-500');
-        
-        // Tambahkan event listener untuk menghapus error
-        document.querySelectorAll('input[name="metode_pembayaran"]').forEach(radio => {
-          radio.addEventListener('change', () => {
-            paymentLabel.classList.remove('text-red-500');
-          }, { once: true });
-        });
-        
-        // Scroll ke bagian error
-        paymentLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const payment = document.querySelector('input[name="metode_pembayaran"]:checked');
+      if(!payment){
+        showError('Pilih metode pembayaran.');
         return false;
       }
-      
-      return isValid;
-    }
-    
-    // [MODIFIKASI] Event listener submit utama
-    orderForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      // Validasi dulu
-      if (validateForm()) {
-        // [PERBAIKAN] Jangan langsung kirim, tapi tampilkan modal konfirmasi
-        successModal.classList.remove('hidden');
-        successModal.classList.add('flex');
+      // ensure there's at least one product
+      const items = Array.from(summaryItemsEl.querySelectorAll('[data-id]'));
+      if(items.length === 0){
+        showError('Pilih minimal satu produk.');
+        return false;
       }
-    });
+      return true;
+    }
 
-    // [PENAMBAHAN] Fungsi submitForm yang menangani fetch
-    function submitForm() {
-      // Tampilkan status loading di tombol
+    // Submit order to Google Apps Script
+    function submitOrder(){
+      if(!validateFormFinal()) return;
+
       setLoading(true);
 
       const formData = new FormData(orderForm);
       const order = {};
       for(const [k,v] of formData.entries()) order[k]=v;
-      
-      // Ambil data keranjang dari elemen ringkasan
-      order.cart = [];
-      summaryItemsEl.querySelectorAll('div[data-id]').forEach(item => {
-        order.cart.push({
-          id: item.dataset.id,
-          name: item.dataset.name,
-          qty: parseInt(item.dataset.qty),
-          subtotal: parseFloat(item.dataset.subtotal)
-        });
-      });
-      
-      // Cek jika URL sudah diisi
-      if (SCRIPT_URL === "URL_APPS_SCRIPT_ANDA_DI_SINI") {
-        showError("URL Apps Script belum diatur. Edit file HTML terlebih dahulu.");
-        setLoading(false);
-        return;
-      }
+      order.cart = Array.from(summaryItemsEl.querySelectorAll('[data-id]')).map(it => ({
+        id: it.dataset.id,
+        name: it.dataset.name,
+        qty: Number(it.dataset.qty),
+        subtotal: Number(it.dataset.subtotal)
+      }));
 
-      // Kirim data ke Google Apps Script
       fetch(SCRIPT_URL, {
         method: 'POST',
-        mode: 'cors', // Penting untuk request antar domain
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order)
       })
-      .then(response => response.json())
+      .then(res => res.json().catch(()=>({status: 'ok'})))
       .then(data => {
         setLoading(false);
-        if (data.status === 'success') {
-          // Tampilkan modal sukses (yang asli)
-          successModal.classList.remove('hidden');
-          successModal.classList.add('flex');
-          // Ganti fungsi tombol OK agar hanya menutup (karena sudah sukses)
-          document.getElementById('modalOkBtn').onclick = () => {
-            successModal.classList.add('hidden');
-            successModal.classList.remove('flex');
-          };
-
-          // Bersihkan form
+        // assume success if no explicit error
+        if(!data || data.status === 'success' || data.status === 'ok'){
+          // show simple success alert / modal
+          alert('Pesanan berhasil dikirim. Terima kasih!');
           orderForm.reset();
           document.querySelectorAll('.product-input').forEach(i=>i.value=0);
           updateTotal();
         } else {
-          // Tampilkan modal error jika Google Script mengembalikan error
-          showError(data.message || 'Terjadi kesalahan di server.');
+          showError(data.message || 'Server mengembalikan error.');
         }
       })
-      .catch(error => {
-        // Tampilkan modal error jika fetch gagal (misal: jaringan)
+      .catch(err => {
         setLoading(false);
-        showError('Gagal terhubung ke server: ' + error.message);
+        showError('Gagal mengirim: ' + (err.message || err));
       });
     }
 
-    // [PENAMBAHAN] Fungsi untuk menampilkan/menyembunyikan loading
-    function setLoading(isLoading) {
-      if (isLoading) {
-        submitBtn.disabled = true;
-        mobileSubmitBtn.disabled = true;
-        submitBtn.textContent = 'Mengirim...';
-        mobileSubmitBtn.textContent = 'Mengirim...';
-      } else {
-        submitBtn.disabled = false;
-        mobileSubmitBtn.disabled = false;
-        submitBtn.textContent = 'Kirim Pesanan';
-        mobileSubmitBtn.textContent = 'Kirim Pesanan';
-      }
+    function setLoading(flag){
+      submitBtn.disabled = flag;
+      mobileSubmit.disabled = flag;
+      submitBtn.textContent = flag ? 'Mengirim...' : 'Kirim Pesanan';
+      mobileSubmit.textContent = flag ? 'Mengirim...' : 'Kirim Pesanan';
     }
 
-    // [PENAMBAHAN] Fungsi untuk menampilkan error modal
-    function showError(message) {
-      errorMessageEl.textContent = message;
+    function showError(msg){
+      errorMessageEl.textContent = msg;
       errorModal.classList.remove('hidden');
       errorModal.classList.add('flex');
     }
 
-    // Event listener untuk Tema Gelap telah dihapus
-    
+    // safe init
     renderProducts();
     updateTotal();
 
@@ -615,7 +397,7 @@
           if(el) el.value = item.qty || 0;
         });
         updateTotal();
-      }catch(e){ }
+      }catch(e){ console.warn(e); }
     });
   </script>
 </body>
