@@ -1,445 +1,93 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Formulir Pemesanan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-    body {
-      font-family: 'Roboto', system-ui, -apple-system, Segoe UI, 'Helvetica Neue', Arial;
-      background-color: #f0f3f8; /* Latar belakang khas Google Form */
-    }
-    .gform-container {
-      max-width: 720px; /* Lebar standar Google Form */
-      margin: 2rem auto;
-    }
-    .gform-header {
-      height: 10px; /* Garis header tebal */
-      background-color: #673ab7; /* Warna ungu khas Google */
-      border-radius: 8px 8px 0 0;
-    }
-    .gform-title {
-      padding: 24px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .gform-card {
-      background-color: #ffffff;
-      border: 1px solid #dadce0;
-      border-radius: 8px;
-      margin-top: 12px;
-      transition: box-shadow 0.2s ease-in-out;
-    }
-    .gform-card:focus-within {
-      border-color: #673ab7;
-      box-shadow: 0 0 0 1px #673ab7;
-    }
-    .gform-question-title {
-      font-size: 16px;
-      font-weight: 500;
-      color: #202124;
-      margin-bottom: 16px;
-    }
-    .gform-input-underline {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid #e0e0e0;
-      padding: 8px 0;
-      font-size: 14px;
-      transition: border-color 0.2s ease-in-out;
-    }
-    .gform-input-underline:focus {
-      outline: none;
-      border-bottom: 2px solid #673ab7;
-      margin-bottom: -1px; /* Kompensasi untuk border lebih tebal */
-    }
-    .gform-radio-label {
-      display: flex;
-      align-items: center;
-      padding: 10px 0;
-      cursor: pointer;
-    }
-    .gform-radio-input {
-      width: 20px;
-      height: 20px;
-      margin-right: 16px;
-      accent-color: #673ab7;
-    }
-    .gform-required {
-      color: #d93025;
-      margin-left: 4px;
-    }
-    .gform-submit-btn {
-      background-color: #673ab7;
-      color: white;
-      font-weight: 500;
-      padding: 10px 24px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-    .gform-submit-btn:hover {
-      background-color: #5e35a1;
-    }
-    .gform-clear-btn {
-      color: #673ab7;
-      font-weight: 500;
-      padding: 10px 16px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-    }
-    .gform-clear-btn:hover {
-      background-color: #f0eefc;
-    }
-    
-    /* Sembunyikan panah di input angka */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Omega Vault - Web App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>body{font-family:'JetBrains Mono',monospace} .no-select{user-select:none}.fade-enter{opacity:0;transform:scale(.98)}.fade-enter-active{opacity:1;transform:none;transition:all .18s ease}</style>
 </head>
-<body class="min-h-screen">
-
-  <main class="gform-container">
-    
-    <!-- Header Formulir -->
-    <div class="gform-header"></div>
-    <div class="bg-white rounded-b-lg shadow-lg">
-      
-      <!-- Judul -->
-      <div class="gform-title">
-        <h1 class="text-3xl font-medium text-gray-900">Formulir Pemesanan</h1>
-        <p class="text-sm text-gray-600 mt-3">Silakan isi data di bawah ini untuk melanjutkan pemesanan. Bidang yang ditandai (<span class="gform-required">*</span>) wajib diisi.</p>
-      </div>
-
-      <!-- Form Utama -->
-      <form id="orderForm" class="p-4 sm:p-6 space-y-3">
-
-        <!-- Kartu: Data Diri -->
-        <div class="gform-card p-6">
-          <div class="gform-question-title">Data Diri</div>
-          <div class="space-y-6">
-            <div>
-              <label for="nama" class="text-sm text-gray-700">Nama Lengkap<span class="gform-required">*</span></label>
-              <input type="text" id="nama" name="nama" required class="gform-input-underline" placeholder="Jawaban Anda">
-            </div>
-            <div>
-              <label for="email" class="text-sm text-gray-700">Email<span class="gform-required">*</span></label>
-              <input type="email" id="email" name="email" required class="gform-input-underline" placeholder="Jawaban Anda">
-            </div>
-            <div>
-              <label for="no_wa" class="text-sm text-gray-700">No. WA<span class="gform-required">*</span></label>
-              <input type="tel" id="no_wa" name="no_wa" required class="gform-input-underline" placeholder="Jawaban Anda (cth: 0812...)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Kartu: Alamat -->
-        <div class="gform-card p-6">
-          <div class="gform-question-title">Alamat Pengiriman</div>
-          <div class="space-y-6">
-            <div>
-              <label for="alamat" class="text-sm text-gray-700">Alamat Lengkap<span class="gform-required">*</span></label>
-              <textarea id="alamat" name="alamat" rows="3" required class="gform-input-underline mt-2" placeholder="Jawaban Anda (Jalan, RT/RW, Kelurahan, Kecamatan...)"></textarea>
-            </div>
-            <div>
-              <label for="kota" class="text-sm text-gray-700">Kota</label>
-              <input type="text" id="kota" name="kota" class="gform-input-underline" placeholder="Jawaban Anda (Kota/Kabupaten)">
-            </div>
-          </div>
-        </div>
-
-        <!-- Kartu: Pilihan Produk -->
-        <div class="gform-card p-6">
-          <div class="gform-question-title">Pilihan Produk</div>
-          <p class="text-sm text-gray-600 -mt-2 mb-4">Masukkan jumlah (pcs) untuk setiap produk yang ingin dipesan. Biarkan 0 jika tidak memesan.</p>
-          <div id="product-list" class="space-y-4">
-            <!-- Produk akan di-render oleh JS di sini -->
-          </div>
-        </div>
-        
-        <!-- Kartu: Metode Pembayaran -->
-        <div class="gform-card p-6">
-          <div class="gform-question-title">Metode Pembayaran<span class="gform-required">*</span></div>
-          <div id="payment-options" class="space-y-2">
-            <label class="gform-radio-label">
-              <input name="metode_pembayaran" type="radio" value="COD (Bayar di Tempat)" class="gform-radio-input">
-              <span class="text-sm text-gray-800">COD (Bayar di Tempat)</span>
-            </label>
-            <label class="gform-radio-label">
-              <input name="metode_pembayaran" type="radio" value="Transfer Bank" class="gform-radio-input">
-              <span class="text-sm text-gray-800">Transfer Bank</span>
-            </label>
-            <label class="gform-radio-label">
-              <input name="metode_pembayaran" type="radio" value="E-Wallet (OVO/GoPay)" class="gform-radio-input">
-              <span class="text-sm text-gray-800">E-Wallet (OVO/GoPay)</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Kartu: Total Pesanan (Dibuat kustom) -->
-        <div class="gform-card p-6 bg-indigo-50 border-indigo-200">
-          <div class="flex items-center justify-between">
-            <div class="gform-question-title mb-0">Total Pesanan</div>
-            <div id="total-price" class="text-2xl font-bold text-indigo-700">Rp0</div>
-          </div>
-          <div id="summary-items-text" class="text-sm text-indigo-700 mt-2">
-            <p>Silakan pilih produk di atas.</p>
-          </div>
-        </div>
-
-        <!-- Footer Tombol -->
-        <div class="flex items-center justify-between pt-4">
-          <button id="submit-btn" type="button" class="gform-submit-btn">
-            Kirim
-          </button>
-          <button id="reset-btn" type="button" class="gform-clear-btn">
-            Hapus formulir
-          </button>
-        </div>
-
-      </form>
-    </div>
-
-  </main>
-
-  <!-- ===== MODALS ===== -->
-  <!-- Error Modal -->
-  <div id="error-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
-    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-2xl">
-      <h4 class="text-xl font-medium text-gray-800">Gagal!</h4>
-      <p id="error-message" class="text-gray-600 mt-2">Terjadi kesalahan.</p>
-      <div class="mt-6 flex justify-end">
-        <button id="closeErrorModalBtn" class="gform-clear-btn">Tutup</button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Success Modal -->
-  <div id="success-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-50">
-    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-2xl">
-      <h4 class="text-xl font-medium text-gray-800">Pesanan Terkirim!</h4>
-      <p class="text-gray-600 mt-2">Terima kasih, pesanan Anda telah kami terima.</p>
-      <div class="mt-6 flex justify-end">
-        <button id="closeSuccessModalBtn" class="gform-submit-btn">OK</button>
-      </div>
-    </div>
-  </div>
+<body class="bg-black text-white min-h-screen flex items-center justify-center p-6 no-select">
+<div class="w-full max-w-3xl">
+<div id="lockedUI" class="bg-gray-900/60 border border-gray-800 rounded-xl p-8 text-center">
+<h1 class="text-2xl font-bold tracking-widest mb-2">OMEGA VAULT</h1>
+<p class="text-sm text-gray-400 mb-6">Akses terbatas. Masukkan token yang dihasilkan dari <strong>Token Generator</strong>.</p>
 
 
-  <script>
-    // === KONFIGURASI ===
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXkaODWcXiKYgb2-K_XbkSW0rj0qZ27rkP-3DCtz7SDnT6sBrvsy_5jxGoGU_MwrE/exec";
+<div class="mb-4">
+<input id="tokenInput" placeholder="Masukkan token (atau biarkan otomatis)" class="w-full bg-black/60 border border-gray-700 rounded p-3 text-center text-sm placeholder-gray-400" />
+</div>
 
-    const products = [
-      { id: 'br001', name: 'BR001 – HP', price: 1000000, formattedPrice: 'Rp1.000.000' },
-      { id: 'br002', name: 'BR002 – TV', price: 1500000, formattedPrice: 'Rp1.500.000' },
-      { id: 'br003', name: 'BR003 – Mouse', price: 30000, formattedPrice: 'Rp30.000' },
-      { id: 'br004', name: 'BR004 – Keyboard', price: 200000, formattedPrice: 'Rp200.000' },
-      { id: 'br005', name: 'BR005 – Speaker', price: 150000, formattedPrice: 'Rp150.000' }
-    ];
 
-    // === ELEMENT SELECTORS ===
-    const productListEl = document.getElementById('product-list');
-    const totalPriceEl = document.getElementById('total-price');
-    const summaryItemsTextEl = document.getElementById('summary-items-text');
-    const orderForm = document.getElementById('orderForm');
-    const submitBtn = document.getElementById('submit-btn');
-    const resetBtn = document.getElementById('reset-btn');
+<div class="flex gap-3 justify-center">
+<button id="useTokenBtn" class="px-6 py-3 rounded bg-yellow-600 font-bold text-black">Gunakan Token</button>
+<button id="openGenBtn" class="px-6 py-3 rounded border border-gray-700 text-gray-300">Buka Token Generator</button>
+</div>
 
-    const errorModal = document.getElementById('error-modal');
-    const errorMessageEl = document.getElementById('error-message');
-    const closeErrorModalBtn = document.getElementById('closeErrorModalBtn');
-    
-    const successModal = document.getElementById('success-modal');
-    const closeSuccessModalBtn = document.getElementById('closeSuccessModalBtn');
 
-    // === FUNGSI ===
+<p class="mt-6 text-xs text-gray-500">Hint: Token disimpan di localStorage key: <code class="text-[10px] px-1 py-0 bg-gray-800 rounded">OMEGA_ACCESS_TOKEN</code></p>
+</div>
 
-    /** Format mata uang ke Rupiah */
-    function formatCurrency(amount){
-      return new Intl.NumberFormat('id-ID', {style:'currency',currency:'IDR',minimumFractionDigits:0}).format(amount).replace(/,00$/, '');
-    }
 
-    /** Tampilkan semua produk di kartu "Pilihan Produk" */
-    function renderProducts() {
-      productListEl.innerHTML = '';
-      products.forEach(p => {
-        const itemEl = document.createElement('div');
-        itemEl.className = 'flex items-center justify-between gap-4 border-t pt-4';
-        itemEl.innerHTML = `
-          <div>
-            <div class="font-medium text-gray-800">${p.name}</div>
-            <div class="text-sm text-gray-500">${p.formattedPrice} / pcs</div>
-          </div>
-          <div class="w-24">
-            <input type="number" min="0" value="0" 
-                   class="product-input gform-input-underline text-center" 
-                   data-price="${p.price}" 
-                   data-name="${p.name}"
-                   id="${p.id}" 
-                   placeholder="0">
-          </div>
-        `;
-        productListEl.appendChild(itemEl);
-      });
-      
-      // Tambahkan event listener ke semua input produk
-      document.querySelectorAll('.product-input').forEach(inp => {
-        inp.addEventListener('input', updateTotal);
-      });
-    }
+<div id="vaultUI" class="hidden mt-6 bg-gray-900/70 border border-yellow-700 rounded-xl p-6">
+<div class="flex justify-between items-center">
+<h2 class="text-xl font-bold">Selamat Datang, VIP Member</h2>
+<button id="logoutBtn" class="text-sm text-gray-200 border border-gray-700 px-3 py-1 rounded">Keluar</button>
+</div>
 
-    /** Perbarui total harga dan ringkasan teks */
-    function updateTotal() {
-      const inputs = document.querySelectorAll('.product-input');
-      let total = 0;
-      let summaryText = [];
-      
-      inputs.forEach(inp => {
-        const price = parseFloat(inp.dataset.price) || 0;
-        const qty = parseInt(inp.value) || 0;
-        if (qty > 0) {
-          total += price * qty;
-          summaryText.push(`${inp.dataset.name} × ${qty}`);
-        }
-      });
 
-      totalPriceEl.textContent = formatCurrency(total);
-      
-      if (summaryText.length > 0) {
-        summaryItemsTextEl.innerHTML = `<p>${summaryText.join('<br>')}</p>`;
-      } else {
-        summaryItemsTextEl.innerHTML = '<p>Silakan pilih produk di atas.</p>';
-      }
-    }
-    
-    /** Reset formulir */
-    function resetForm() {
-      orderForm.reset();
-      document.querySelectorAll('.product-input').forEach(i => i.value = 0);
-      updateTotal();
-    }
+<p class="text-gray-300 my-4">Akses video premium aktif. Token valid.</p>
 
-    /** Tampilkan Modal Error */
-    function showError(msg){
-      errorMessageEl.textContent = msg;
-      errorModal.classList.remove('hidden');
-      errorModal.classList.add('flex');
-    }
 
-    /** Validasi Form Akhir */
-    function validateFormFinal(){
-      const required = ['nama','email','no_wa','alamat'];
-      for(const id of required){
-        const el = document.getElementById(id);
-        if(!el.value.trim()){
-          el.focus();
-          // Cari elemen gform-card terdekat dan fokuskan
-          el.closest('.gform-card').focus();
-          showError('Mohon lengkapi: ' + el.previousElementSibling.textContent.replace('*','').trim());
-          return false;
-        }
-      }
-      const payment = document.querySelector('input[name="metode_pembayaran"]:checked');
-      if(!payment){
-        document.getElementById('payment-options').closest('.gform-card').focus();
-        showError('Pilih metode pembayaran.');
-        return false;
-      }
-      // Cek apakah ada produk yang dipilih
-      const inputs = document.querySelectorAll('.product-input');
-      const hasProduct = Array.from(inputs).some(inp => (parseInt(inp.value) || 0) > 0);
-      if(!hasProduct){
-        document.getElementById('product-list').closest('.gform-card').focus();
-        showError('Pilih minimal satu produk.');
-        return false;
-      }
-      return true;
-    }
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-black/60 p-4 rounded border border-gray-800">
+<h3 class="font-bold mb-2">Player (Demo)</h3>
+<video id="demoPlayer" controls class="w-full bg-black" controlsList="nodownload" disablePictureInPicture>
+<source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+Browser tidak mendukung video tag.
+</video>
+</div>
 
-    /** Kirim Pesanan ke Google Script */
-    function submitOrder() {
-      if (!validateFormFinal()) return;
 
-      setLoading(true);
+<div class="bg-black/60 p-4 rounded border border-gray-800">
+<h3 class="font-bold mb-2">Token Info</h3>
+<div id="tokenInfo" class="font-mono text-sm text-green-300 break-all">-</div>
+<div class="mt-3 text-xs text-gray-400">Token disimpan lokal — server-side harus diverifikasi di produksi.</div>
+</div>
+</div>
+</div>
 
-      const formData = new FormData(orderForm);
-      const orderData = {};
-      // Ambil data dari form (Nama, Email, dll)
-      for(const [k,v] of formData.entries()) orderData[k] = v;
-      
-      // Ambil data keranjang dari input produk
-      orderData.cart = [];
-      document.querySelectorAll('.product-input').forEach(inp => {
-        const qty = parseInt(inp.value) || 0;
-        if(qty > 0) {
-          orderData.cart.push({
-            id: inp.id,
-            name: inp.dataset.name,
-            qty: qty,
-            subtotal: (parseFloat(inp.dataset.price) || 0) * qty
-          });
-        }
-      });
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      })
-      .then(res => res.json().catch(()=>({status: 'ok'})))
-      .then(data => {
-        setLoading(false);
-        if(!data || data.status === 'success' || data.status === 'ok'){
-          // Sukses!
-          successModal.classList.remove('hidden');
-          successModal.classList.add('flex');
-          resetForm();
-        } else {
-          showError(data.message || 'Server mengembalikan error.');
-        }
-      })
-      .catch(err => {
-        setLoading(false);
-        showError('Gagal mengirim: ' + (err.message || err));
-      });
-    }
+</div>
 
-    /** Atur status loading pada tombol submit */
-    function setLoading(flag){
-      submitBtn.disabled = flag;
-      submitBtn.textContent = flag ? 'Mengirim...' : 'Kirim';
-      submitBtn.classList.toggle('opacity-75', flag);
-    }
 
-    // === INISIALISASI & EVENT LISTENERS ===
-    document.addEventListener('DOMContentLoaded', () => {
-      renderProducts();
-      updateTotal();
+<script>
+const STORAGE_KEY = 'OMEGA_ACCESS_TOKEN';
 
-      // Listener tombol
-      submitBtn.addEventListener('click', submitOrder);
-      resetBtn.addEventListener('click', resetForm);
-      
-      // Listener tombol tutup modal
-      closeErrorModalBtn.addEventListener('click', () => {
-        errorModal.classList.add('hidden');
-        errorModal.classList.remove('flex');
-      });
-      closeSuccessModalBtn.addEventListener('click', () => {
-        successModal.classList.add('hidden');
-        successModal.classList.remove('flex');
-      });
-    });
 
-  </script>
-</body>
+function isTokenFormatValid(t) {
+if (!t) return false;
+// Contoh validasi: harus ada 6-7 segmen dan mengandung year di akhir. Disesuaikan dengan generator.
+const parts = t.split('-');
+return parts.length >= 6 && /\d{4}$/.test(t);
+}
+
+
+function showVault(token) {
+document.getElementById('lockedUI').classList.add('hidden');
+const vault = document.getElementById('vaultUI');
+document.getElementById('tokenInfo').innerText = token;
+vault.classList.remove('hidden');
+}
+
+
+function showLocked() {
+document.getElementById('vaultUI').classList.add('hidden');
+document.getElementById('lockedUI').classList.remove('hidden');
+}
+
+
+// Try auto-load token from localStorage
+window.addEventListener('DOMContentLoaded', () => {
 </html>
