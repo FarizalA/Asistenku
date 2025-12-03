@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saraf Kopi</title>
-     <link rel="icon" href="./src/a1.png" type="image/png">
+    <title>Saraf Kopi - Connect Your Sense</title>
+    <link rel="icon" href="./src/a1.png" type="image/png">
     <!-- 1. Load Tailwind CSS (Untuk Desain) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -68,16 +68,20 @@
 
         // --- DATA MENU ---
         const MENU_ITEMS = [
-            { id: 1, name: "Kopi Susu Neuron", desc: "Signature kopi susu gula aren yang mengaktifkan sel saraf.", price: 25000, category: "Coffee", rating: 4.9, popular: true },
-            { id: 2, name: "Espresso Adrenalin", desc: "Double shot espresso untuk pacu detak jantung.", price: 22000, category: "Coffee", rating: 4.8, popular: false },
-            { id: 3, name: "Latte Dopamin", desc: "Latte creamy lembut pemicu rasa bahagia.", price: 28000, category: "Coffee", rating: 4.9, popular: true },
-            { id: 4, name: "Americano Sadar", desc: "Hitam pekat, tanpa gula, bikin mata melek seketika.", price: 20000, category: "Coffee", rating: 4.7, popular: false },
-            { id: 5, name: "Caramel Cortex", desc: "Perpaduan kopi dan saus karamel manis.", price: 30000, category: "Coffee", rating: 4.8, popular: false },
-            { id: 6, name: "Mochaccino Memori", desc: "Kopi cokelat hangat untuk kenangan manis.", price: 30000, category: "Coffee", rating: 4.8, popular: false },
-            { id: 7, name: "Matcha Medula", desc: "Green tea latte premium (Non-Coffee).", price: 28000, category: "Non-Coffee", rating: 4.7, popular: true },
-            { id: 8, name: "Cokelat Cerebellum", desc: "Es cokelat klasik yang menenangkan keseimbangan.", price: 26000, category: "Non-Coffee", rating: 4.9, popular: false },
-            { id: 9, name: "Roti Bakar Refleks", desc: "Roti bakar srikaya untuk respon lapar cepat.", price: 18000, category: "Snack", rating: 4.6, popular: false },
-            { id: 10, name: "Croissant Sinapsis", desc: "Pastry renyah teman setia kopi.", price: 22000, category: "Snack", rating: 4.7, popular: true }
+            // Tambahkan properti 'image' untuk setiap menu. 
+            // Pastikan nama file sesuai dengan yang ada di folder komputer Anda.
+            { id: 1, name: "Kopi Susu Neuron", desc: "Signature kopi susu gula aren yang mengaktifkan sel saraf.", price: 25000, category: "Coffee", rating: 4.9, popular: true, image: "./src/kopi1.jpg" },
+            { id: 2, name: "Espresso Adrenalin", desc: "Double shot espresso untuk pacu detak jantung.", price: 22000, category: "Coffee", rating: 4.8, popular: false, image: "./src/kopi2.jpg" },
+            { id: 3, name: "Latte Dopamin", desc: "Latte creamy lembut pemicu rasa bahagia.", price: 28000, category: "Coffee", rating: 4.9, popular: true, image: "./src/kopi3.jpg" },
+            { id: 4, name: "Americano Sadar", desc: "Hitam pekat, tanpa gula, bikin mata melek seketika.", price: 20000, category: "Coffee", rating: 4.7, popular: false, image: "./src/kopi4.jpg" },
+            { id: 5, name: "Caramel Cortex", desc: "Perpaduan kopi dan saus karamel manis.", price: 30000, category: "Coffee", rating: 4.8, popular: false, image: "./src/kopi5.jpg" },
+            { id: 6, name: "Mochaccino Memori", desc: "Kopi cokelat hangat untuk kenangan manis.", price: 30000, category: "Coffee", rating: 4.8, popular: false, image: "./src/kopi6.jpg" },
+            { id: 7, name: "Matcha Medula", desc: "Green tea latte premium (Non-Coffee).", price: 28000, category: "Non-Coffee", rating: 4.7, popular: true, image: "./src/nonkopi1.jpg" },
+            { id: 8, name: "Cokelat Cerebellum", desc: "Es cokelat klasik yang menenangkan keseimbangan.", price: 26000, category: "Non-Coffee", rating: 4.9, popular: false, image: "./src/nonkopi2.jpg" },
+            { id: 9, name: "Roti Bakar Refleks", desc: "Roti bakar srikaya untuk respon lapar cepat.", price: 18000, category: "Snack", rating: 4.6, popular: false, image: "./src/snack1.jpg" },
+            { id: 10, name: "Croissant Sinapsis", desc: "Pastry renyah teman setia kopi.", price: 22000, category: "Snack", rating: 4.7, popular: true, image: "./src/snack2.jpg" },
+            // MENU KE-11 DITAMBAHKAN DI SINI
+            { id: 11, name: "Affogato Akson", desc: "Espresso panas siram di atas es krim vanila dingin.", price: 28000, category: "Coffee", rating: 5.0, popular: true, image: "./src/kopi7.jpg" }
         ];
 
         // --- MAIN APP COMPONENT ---
@@ -143,7 +147,7 @@
                 <nav className={`fixed top-0 w-full z-40 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
                     <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <LogoSaraf className="w-10 h-10 md:w-12 md:h-12 drop-shadow-md" />
+                        <LogoSaraf className="w-10 h-10 md:w-10 md:h-10 drop-shadow-md" />
                         <div>
                         <h1 className="text-xl md:text-2xl font-bold text-[#581c1c] tracking-tight leading-none">SARAF KOPI</h1>
                         <p className="text-[10px] md:text-xs text-[#fca5a5] font-medium tracking-widest uppercase">Connect Your Sense</p>
@@ -236,9 +240,25 @@
                             FAVORIT
                             </div>
                         )}
-                        <div className="w-full aspect-square bg-gradient-to-br from-gray-50 to-rose-50 rounded-xl mb-4 flex items-center justify-center text-rose-200 group-hover:scale-105 transition-transform duration-500">
-                            {item.category === "Snack" ? <Icons.Menu size={64} /> : <Icons.Coffee size={64} />}
+                        
+                        {/* BAGIAN INI DIUBAH UNTUK MENAMPILKAN GAMBAR */}
+                        <div className="w-full aspect-square bg-gray-50 rounded-xl mb-4 overflow-hidden group-hover:scale-105 transition-transform duration-500 relative">
+                            {/* Jika gambar ada, tampilkan gambar. Jika error/tidak ada, tampilkan ikon default */}
+                            <img 
+                                src={item.image} 
+                                alt={item.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.style.display = 'none'; // Sembunyikan gambar rusak
+                                    e.target.nextSibling.style.display = 'flex'; // Tampilkan ikon cadangan
+                                }}
+                            />
+                            {/* Ikon Cadangan (Hidden by default, muncul jika gambar error) */}
+                            <div className="absolute inset-0 bg-rose-50 hidden items-center justify-center text-rose-200">
+                                {item.category === "Snack" ? <Icons.Menu size={64} /> : <Icons.Coffee size={64} />}
+                            </div>
                         </div>
+
                         <div className="flex-1 flex flex-col">
                             <div className="flex justify-between items-start mb-1">
                             <h4 className="font-bold text-lg text-gray-900 leading-tight">{item.name}</h4>
@@ -327,7 +347,4 @@
         root.render(<SarafKopiApp />);
     </script>
 </body>
-
 </html>
-
-
