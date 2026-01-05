@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuesioner Evaluasi UI/UX - SARAF KOPI</title>
+    
+    <!-- 
+    ========================================================================
+    PANDUAN KONEKSI GOOGLE SHEETS
+    ========================================================================
+    Agar data masuk, pastikan HEADER (Baris 1) di Google Sheet Anda 
+    memiliki nama kolom PERSIS seperti di bawah ini:
+    
+    Kolom A: Timestamp
+    Kolom B: Jenis Kelamin
+    Kolom C: Latar Belakang
+    Kolom D: Usia
+    
+    Kolom E - I (Aspek Kognisi):
+    Kognisi_1, Kognisi_2, Kognisi_3, Kognisi_4, Kognisi_5
+    
+    Kolom J - N (Aspek Persepsi):
+    Persepsi_1, Persepsi_2, Persepsi_3, Persepsi_4, Persepsi_5
+    
+    Kolom O - S (Aspek Perilaku):
+    Perilaku_1, Perilaku_2, Perilaku_3, Perilaku_4, Perilaku_5
+    
+    Kolom T - V (Aspek Kepuasan):
+    Kepuasan_1, Kepuasan_2, Kepuasan_3
+    
+    Kolom W - Y (Feedback):
+    Feedback_Mudah, Feedback_Bingung, Feedback_Saran
+    ========================================================================
+    -->
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -82,8 +112,6 @@
             border-color: #e5e7eb; /* Default border */
         }
         
-        /* Highlight border red ONLY when user interacts/focuses and leaves it invalid is handled by browser, 
-           but we can style required indicators */
         .required-marker {
             color: #ef4444;
             margin-left: 2px;
@@ -159,15 +187,15 @@
                 </h3>
 
                 <div class="space-y-6">
-                    <!-- Gender -->
+                    <!-- Jenis Kelamin -->
                     <div>
                         <label class="block text-sm font-bold text-saraf-900 mb-2">Jenis Kelamin<span class="required-marker">*</span></label>
                         <div class="flex gap-4">
                             <label class="flex items-center cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-saraf-500 hover:bg-saraf-50 transition w-full sm:w-auto">
-                                <input type="radio" name="gender" value="Laki-laki" class="accent-saraf-600 mr-2" required> Laki-laki
+                                <input type="radio" name="jenis_kelamin" value="Laki-laki" class="accent-saraf-600 mr-2" required> Laki-laki
                             </label>
                             <label class="flex items-center cursor-pointer bg-white px-4 py-2 rounded-lg border border-gray-200 hover:border-saraf-500 hover:bg-saraf-50 transition w-full sm:w-auto">
-                                <input type="radio" name="gender" value="Perempuan" class="accent-saraf-600 mr-2" required> Perempuan
+                                <input type="radio" name="jenis_kelamin" value="Perempuan" class="accent-saraf-600 mr-2" required> Perempuan
                             </label>
                         </div>
                     </div>
@@ -177,17 +205,17 @@
                         <label class="block text-sm font-bold text-saraf-900 mb-2">Latar Belakang<span class="required-marker">*</span></label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <label class="flex items-center cursor-pointer bg-white px-4 py-3 rounded-lg border border-gray-200 hover:border-saraf-500 hover:bg-saraf-50 transition">
-                                <input type="radio" name="background" value="Mahasiswa" class="accent-saraf-600 mr-2" required> Mahasiswa
+                                <input type="radio" name="latar_belakang" value="Mahasiswa" class="accent-saraf-600 mr-2" required> Mahasiswa
                             </label>
                             <label class="flex items-center cursor-pointer bg-white px-4 py-3 rounded-lg border border-gray-200 hover:border-saraf-500 hover:bg-saraf-50 transition">
-                                <input type="radio" name="background" value="Pekerja" class="accent-saraf-600 mr-2" required> Pekerja
+                                <input type="radio" name="latar_belakang" value="Pekerja" class="accent-saraf-600 mr-2" required> Pekerja
                             </label>
                             <label class="flex items-center cursor-pointer bg-white px-4 py-3 rounded-lg border border-gray-200 hover:border-saraf-500 hover:bg-saraf-50 transition">
-                                <input type="radio" name="background" value="Wirausaha" class="accent-saraf-600 mr-2" required> Wirausaha
+                                <input type="radio" name="latar_belakang" value="Wirausaha" class="accent-saraf-600 mr-2" required> Wirausaha
                             </label>
                             <div class="relative">
-                                <input type="radio" name="background" value="Other" class="peer absolute left-4 top-4 accent-saraf-600" required>
-                                <input type="text" name="background_other" placeholder="Lainnya..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none transition bg-white peer-checked:border-saraf-600 peer-checked:bg-saraf-50" oninput="document.querySelector('input[name=background][value=Other]').checked = true">
+                                <input type="radio" name="latar_belakang" value="Other" class="peer absolute left-4 top-4 accent-saraf-600" required>
+                                <input type="text" name="latar_belakang_other" placeholder="Lainnya..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none transition bg-white peer-checked:border-saraf-600 peer-checked:bg-saraf-50" oninput="document.querySelector('input[name=latar_belakang][value=Other]').checked = true">
                             </div>
                         </div>
                     </div>
@@ -196,13 +224,12 @@
                     <div>
                         <label class="block text-sm font-bold text-saraf-900 mb-2">Usia/Umur<span class="required-marker">*</span></label>
                         <div class="relative">
-                            <!-- ADDED name="age" HERE -->
-                            <select name="age" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white appearance-none cursor-pointer hover:border-saraf-400" required>
+                            <select name="usia" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white appearance-none cursor-pointer hover:border-saraf-400" required>
                                 <option value="" disabled selected>Pilih rentang usia...</option>
-                                <option value="<18">Kurang dari 18 Tahun</option>
-                                <option value="18-24">18 - 24 Tahun</option>
-                                <option value="25-34">25 - 34 Tahun</option>
-                                <option value=">34">Lebih dari 34 Tahun</option>
+                                <option value="<18 Tahun">Kurang dari 18 Tahun</option>
+                                <option value="18 - 24 Tahun">18 - 24 Tahun</option>
+                                <option value="25 - 34 Tahun">25 - 34 Tahun</option>
+                                <option value="> 34 Tahun">Lebih dari 34 Tahun</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-saraf-600">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -212,111 +239,8 @@
                 </div>
             </section>
 
-            <!-- LIKERT SECTIONS -->
-            <script>
-                function createLikertSection(number, title, subtitle, questions, idPrefix) {
-                    let html = `
-                    <section class="glass-card rounded-3xl p-6 md:p-8 mb-6 fade-in-up border-t-4 border-saraf-600">
-                        <h3 class="font-serif text-2xl text-saraf-800 mb-1 flex items-center">
-                            <span class="bg-saraf-100 text-saraf-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-3">${number}</span>
-                            ${title}
-                        </h3>
-                        <p class="text-sm text-saraf-600 mb-8 italic ml-11">${subtitle}</p>
-                        <div class="space-y-8">
-                    `;
-                    
-                    questions.forEach((q, index) => {
-                        html += `
-                        <div class="bg-white/60 p-5 rounded-xl border border-saraf-100 hover:border-saraf-300 transition-colors duration-300">
-                            <p class="text-saraf-900 font-medium mb-4 flex">
-                                <span class="text-saraf-400 mr-2 text-sm">${index + 1}.</span>
-                                ${q} <span class="required-marker">*</span>
-                            </p>
-                            <div class="flex justify-between items-center max-w-md mx-auto relative">
-                                <!-- Track line -->
-                                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-saraf-100 -z-10 hidden sm:block"></div>
-                                
-                                <span class="text-xs text-saraf-500 font-bold hidden sm:block w-12 text-center">STS</span>
-                                <div class="flex gap-2 sm:gap-4 flex-1 justify-center bg-white/50 sm:bg-transparent py-2 rounded-full">
-                        `;
-                        
-                        for(let i=1; i<=5; i++) {
-                            html += `
-                                <div class="flex flex-col items-center group">
-                                    <input type="radio" name="${idPrefix}_q${index}" id="${idPrefix}_q${index}_${i}" value="${i}" class="likert-input hidden" required>
-                                    <label for="${idPrefix}_q${index}_${i}" class="likert-label w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-saraf-200 bg-white flex items-center justify-center cursor-pointer text-saraf-600 font-bold text-sm sm:text-lg hover:border-saraf-500 hover:text-saraf-700 shadow-sm">
-                                        ${i}
-                                    </label>
-                                </div>
-                            `;
-                        }
-
-                        html += `
-                                </div>
-                                <span class="text-xs text-saraf-500 font-bold hidden sm:block w-12 text-center">SS</span>
-                            </div>
-                            <div class="flex justify-between mt-2 sm:hidden px-2">
-                                <span class="text-[10px] text-saraf-500">Sangat Tdk Setuju</span>
-                                <span class="text-[10px] text-saraf-500">Sangat Setuju</span>
-                            </div>
-                        </div>
-                        `;
-                    });
-
-                    html += `</div></section>`;
-                    document.write(html);
-                }
-            </script>
-
-            <!-- Aspek Kognisi -->
-            <script>
-                createLikertSection(2, "Aspek Kognisi", 
-                    "Menilai pemahaman pengguna terhadap struktur, fitur, dan cara kerja prototype.", 
-                    [
-                        "Saya dapat memahami tujuan aplikasi ini sejak pertama kali melihat tampilan awal.",
-                        "Saya memahami fungsi setiap menu utama pada prototype aplikasi.",
-                        "Ikon, label, dan teks pada prototype mudah dipahami.",
-                        "Saya dapat mengetahui langkah yang harus dilakukan untuk melakukan pembelian produk.",
-                        "Saya tidak membutuhkan penjelasan tambahan untuk memahami cara menggunakan prototype ini."
-                    ], "cog");
-            </script>
-
-            <!-- Aspek Persepsi -->
-            <script>
-                createLikertSection(3, "Aspek Persepsi", 
-                    "Menilai penilaian subjektif pengguna terhadap tampilan visual dan kenyamanan.", 
-                    [
-                        "Tampilan visual prototype terlihat rapi dan konsisten.",
-                        "Kombinasi warna dan tata letak elemen terasa nyaman dilihat.",
-                        "Desain antarmuka prototype terlihat menarik untuk sebuah aplikasi e-commerce.",
-                        "Ukuran teks, tombol, dan elemen visual mudah dibaca dan dikenali.",
-                        "Secara keseluruhan, prototype ini memberikan kesan yang positif."
-                    ], "per");
-            </script>
-
-            <!-- Aspek Perilaku -->
-            <script>
-                createLikertSection(4, "Aspek Perilaku", 
-                    "Menilai interaksi nyata pengguna saat mencoba prototype.", 
-                    [
-                        "Alur navigasi antar halaman terasa jelas dan tidak membingungkan.",
-                        "Saya dapat berpindah dari satu halaman ke halaman lain dengan lancar.",
-                        "Proses mencari produk hingga ke tahap checkout terasa runtut.",
-                        "Saya dapat menyelesaikan tugas (misalnya memilih produk) tanpa hambatan berarti.",
-                        "Saya tidak merasa ingin keluar dari aplikasi sebelum menyelesaikan aktivitas yang saya lakukan."
-                    ], "beh");
-            </script>
-
-            <!-- Aspek Kepuasan -->
-            <script>
-                createLikertSection(5, "Aspek Kepuasan", 
-                    "Mengukur kepuasan keseluruhan sebagai indikator keberhasilan UX.", 
-                    [
-                        "Prototype ini mudah digunakan secara keseluruhan.",
-                        "Saya merasa nyaman saat berinteraksi dengan prototype aplikasi.",
-                        "Jika aplikasi ini dikembangkan lebih lanjut, saya tertarik untuk menggunakannya."
-                    ], "sat");
-            </script>
+            <!-- Container for Dynamic Likert Sections -->
+            <div id="dynamic-questions-container"></div>
 
             <!-- Pertanyaan Terbuka -->
             <section class="glass-card rounded-3xl p-6 md:p-8 mb-6 fade-in-up border-t-4 border-saraf-600">
@@ -330,19 +254,19 @@
                         <label class="block text-saraf-900 font-medium mb-2">
                             Bagian apa dari prototype yang menurut Anda paling mudah digunakan? <span class="required-marker">*</span>
                         </label>
-                        <textarea name="feedback_easy" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
+                        <textarea name="feedback_mudah" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-saraf-900 font-medium mb-2">
                             Bagian apa yang menurut Anda masih membingungkan atau kurang jelas? <span class="required-marker">*</span>
                         </label>
-                        <textarea name="feedback_confusing" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
+                        <textarea name="feedback_bingung" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-saraf-900 font-medium mb-2">
                             Saran Anda untuk meningkatkan UI/UX pada prototype aplikasi ini! <span class="required-marker">*</span>
                         </label>
-                        <textarea name="feedback_suggestion" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
+                        <textarea name="feedback_saran" required rows="3" placeholder="Jawaban Anda..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-saraf-600 focus:ring-1 focus:ring-saraf-600 outline-none bg-white transition resize-none"></textarea>
                     </div>
                 </div>
             </section>
@@ -373,16 +297,133 @@
                 <svg class="w-10 h-10 text-saraf-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <h3 class="font-serif text-2xl font-bold text-saraf-800 mb-2">Terima Kasih!</h3>
-            <p class="text-gray-600 mb-6">Masukan Anda telah berhasil disimpan. Terima kasih telah membantu pengembangan SARAF KOPI.</p>
+            <p class="text-gray-600 mb-6">Masukan Anda telah dikirim. <br><span class="text-sm text-saraf-500 italic">(Jika data belum muncul di Sheet, pastikan Deployment Script sudah diset ke 'Anyone')</span></p>
             <button onclick="closeModal()" class="bg-saraf-600 text-white px-6 py-2 rounded-lg hover:bg-saraf-700 transition w-full font-bold shadow-md">Tutup</button>
         </div>
     </div>
 
-    <!-- Error/Validation Modal (Optional simpler alert) -->
-
     <script>
-        // --- KONFIGURASI ---
-        // Ganti URL ini dengan Web App URL dari Google Apps Script Anda
+        // --- DATA PERTANYAAN ---
+        // Generasi pertanyaan menggunakan JS untuk menghindari kode berulang
+        const likertSections = [
+            {
+                number: 2,
+                title: "Aspek Kognisi",
+                subtitle: "Menilai pemahaman pengguna terhadap struktur, fitur, dan cara kerja prototype.",
+                prefix: "kognisi",
+                items: [
+                    "Saya dapat memahami tujuan aplikasi ini sejak pertama kali melihat tampilan awal.",
+                    "Saya memahami fungsi setiap menu utama pada prototype aplikasi.",
+                    "Ikon, label, dan teks pada prototype mudah dipahami.",
+                    "Saya dapat mengetahui langkah yang harus dilakukan untuk melakukan pembelian produk.",
+                    "Saya tidak membutuhkan penjelasan tambahan untuk memahami cara menggunakan prototype ini."
+                ]
+            },
+            {
+                number: 3,
+                title: "Aspek Persepsi",
+                subtitle: "Menilai penilaian subjektif pengguna terhadap tampilan visual dan kenyamanan.",
+                prefix: "persepsi",
+                items: [
+                    "Tampilan visual prototype terlihat rapi dan konsisten.",
+                    "Kombinasi warna dan tata letak elemen terasa nyaman dilihat.",
+                    "Desain antarmuka prototype terlihat menarik untuk sebuah aplikasi e-commerce.",
+                    "Ukuran teks, tombol, dan elemen visual mudah dibaca dan dikenali.",
+                    "Secara keseluruhan, prototype ini memberikan kesan yang positif."
+                ]
+            },
+            {
+                number: 4,
+                title: "Aspek Perilaku",
+                subtitle: "Menilai interaksi nyata pengguna saat mencoba prototype.",
+                prefix: "perilaku",
+                items: [
+                    "Alur navigasi antar halaman terasa jelas dan tidak membingungkan.",
+                    "Saya dapat berpindah dari satu halaman ke halaman lain dengan lancar.",
+                    "Proses mencari produk hingga ke tahap checkout terasa runtut.",
+                    "Saya dapat menyelesaikan tugas (misalnya memilih produk) tanpa hambatan berarti.",
+                    "Saya tidak merasa ingin keluar dari aplikasi sebelum menyelesaikan aktivitas yang saya lakukan."
+                ]
+            },
+            {
+                number: 5,
+                title: "Aspek Kepuasan",
+                subtitle: "Mengukur kepuasan keseluruhan sebagai indikator keberhasilan UX.",
+                prefix: "kepuasan",
+                items: [
+                    "Prototype ini mudah digunakan secara keseluruhan.",
+                    "Saya merasa nyaman saat berinteraksi dengan prototype aplikasi.",
+                    "Jika aplikasi ini dikembangkan lebih lanjut, saya tertarik untuk menggunakannya."
+                ]
+            }
+        ];
+
+        function renderLikertSections() {
+            const container = document.getElementById('dynamic-questions-container');
+            let htmlContent = '';
+
+            likertSections.forEach(section => {
+                let questionsHtml = '';
+                section.items.forEach((item, index) => {
+                    // IMPORTANT: Name matches Google Sheet logic e.g., kognisi_1, kognisi_2
+                    const fieldName = `${section.prefix}_${index + 1}`;
+                    
+                    let optionsHtml = '';
+                    for (let i = 1; i <= 5; i++) {
+                        optionsHtml += `
+                            <div class="flex flex-col items-center group">
+                                <input type="radio" name="${fieldName}" id="${fieldName}_${i}" value="${i}" class="likert-input hidden" required>
+                                <label for="${fieldName}_${i}" class="likert-label w-9 h-9 sm:w-11 sm:h-11 rounded-full border-2 border-saraf-200 bg-white flex items-center justify-center cursor-pointer text-saraf-600 font-bold text-sm sm:text-lg hover:border-saraf-500 hover:text-saraf-700 shadow-sm">
+                                    ${i}
+                                </label>
+                            </div>
+                        `;
+                    }
+
+                    questionsHtml += `
+                        <div class="bg-white/60 p-5 rounded-xl border border-saraf-100 hover:border-saraf-300 transition-colors duration-300">
+                            <p class="text-saraf-900 font-medium mb-4 flex">
+                                <span class="text-saraf-400 mr-2 text-sm">${index + 1}.</span>
+                                ${item} <span class="required-marker">*</span>
+                            </p>
+                            <div class="flex justify-between items-center max-w-md mx-auto relative">
+                                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-saraf-100 -z-10 hidden sm:block"></div>
+                                <span class="text-xs text-saraf-500 font-bold hidden sm:block w-12 text-center">STS</span>
+                                <div class="flex gap-2 sm:gap-4 flex-1 justify-center bg-white/50 sm:bg-transparent py-2 rounded-full">
+                                    ${optionsHtml}
+                                </div>
+                                <span class="text-xs text-saraf-500 font-bold hidden sm:block w-12 text-center">SS</span>
+                            </div>
+                            <div class="flex justify-between mt-2 sm:hidden px-2">
+                                <span class="text-[10px] text-saraf-500">Sangat Tdk Setuju</span>
+                                <span class="text-[10px] text-saraf-500">Sangat Setuju</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                htmlContent += `
+                    <section class="glass-card rounded-3xl p-6 md:p-8 mb-6 fade-in-up border-t-4 border-saraf-600">
+                        <h3 class="font-serif text-2xl text-saraf-800 mb-1 flex items-center">
+                            <span class="bg-saraf-100 text-saraf-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-3">${section.number}</span>
+                            ${section.title}
+                        </h3>
+                        <p class="text-sm text-saraf-600 mb-8 italic ml-11">${section.subtitle}</p>
+                        <div class="space-y-8">
+                            ${questionsHtml}
+                        </div>
+                    </section>
+                `;
+            });
+
+            container.innerHTML = htmlContent;
+        }
+
+        // Render questions on load
+        renderLikertSections();
+
+        // --- SUBMISSION LOGIC ---
+        // URL Google Apps Script Anda (Sesuai kode sebelumnya)
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd8DQoICgmopD6LWnuLSzFTnxZriaYMVFii0pI2Agan9aP3pI1dYt6aKbUVHiiHIKBsA/exec'; 
 
         function handleSubmit(e) {
@@ -410,21 +451,30 @@
 
             // 3. Persiapkan Data
             const formData = new FormData(form);
+            
+            // [DEBUGGING] Log data yang akan dikirim ke Console Browser
+            console.log("=== DATA YANG DIKIRIM KE GOOGLE SHEETS ===");
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            console.log("=== URL SCRIPT: " + GOOGLE_SCRIPT_URL + " ===");
 
             // 4. Kirim ke Google Sheets
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                mode: 'no-cors' // Penting untuk Google Scripts
             })
-            .then(response => {
-                // Tampilkan Modal Sukses
+            .then(() => {
+                // Google Script dengan no-cors tidak mengembalikan response JSON yang bisa dibaca
+                // Jadi kita asumsikan sukses jika fetch berhasil dieksekusi
                 showSuccessModal();
-                // Reset Form
                 form.reset();
+                window.scrollTo(0, 0);
             })
             .catch(error => {
-                console.error('Error!', error.message);
-                alert("Maaf, terjadi kesalahan saat mengirim data. Silakan coba lagi.");
+                console.error('Error!', error);
+                alert("Maaf, terjadi kesalahan koneksi (Jaringan/Browser). Silakan coba lagi.");
             })
             .finally(() => {
                 // 5. Kembalikan Tombol ke Semula
@@ -455,5 +505,3 @@
     </script>
 </body>
 </html>
-
-
