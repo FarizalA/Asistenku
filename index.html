@@ -1,13 +1,694 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>skripsi-pro</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VIP Plan — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ─── Reset & Base ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold:       #E8B84B;
+    --gold-light: #F5D080;
+    --gold-dark:  #A07820;
+    --bg:         #0B0C0F;
+    --bg2:        #111318;
+    --bg3:        #181B22;
+    --text:       #EDE9DE;
+    --muted:      #7A7568;
+    --border:     rgba(232,184,75,.18);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── Canvas stars ─── */
+  #stars-canvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .55;
+  }
+
+  /* ─── Noise overlay ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: .4;
+  }
+
+  /* ─── Layout ─── */
+  .wrap { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── Nav ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(18px);
+    background: rgba(11,12,15,.75);
+  }
+  nav .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    letter-spacing: .02em;
+  }
+  .logo span { color: var(--text); }
+  .badge-nav {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #0B0C0F;
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 80px 0 60px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: .78rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(232,184,75,.08);
+    border: 1px solid var(--border);
+    padding: 7px 20px; border-radius: 100px;
+    margin-bottom: 36px;
+    animation: fadeUp .8s ease both;
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .4; transform: scale(.7); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -.02em;
+    margin-bottom: 28px;
+    animation: fadeUp .9s .15s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 52px;
+    animation: fadeUp 1s .25s ease both;
+  }
+
+  /* ─── Countdown ─── */
+  .countdown {
+    display: flex; gap: 16px;
+    animation: fadeUp 1s .35s ease both;
+    margin-bottom: 52px;
+  }
+  .count-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 24px;
+    min-width: 88px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .count-block::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: .6;
+  }
+  .count-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+  .count-lbl {
+    font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-top: 6px;
+  }
+
+  /* ─── CTA notify ─── */
+  .notify-form {
+    display: flex; gap: 10px;
+    animation: fadeUp 1s .45s ease both;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .notify-form input {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    padding: 13px 20px;
+    border-radius: 10px;
+    width: 280px;
+    outline: none;
+    transition: border-color .3s;
+  }
+  .notify-form input:focus { border-color: var(--gold); }
+  .notify-form input::placeholder { color: var(--muted); }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #0B0C0F;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: .95rem;
+    padding: 13px 28px;
+    border: none; border-radius: 10px;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    white-space: nowrap;
+  }
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(232,184,75,.35);
+  }
+  .btn-gold:active { transform: translateY(0); }
+  .notify-success {
+    display: none;
+    color: var(--gold);
+    font-size: .9rem;
+    margin-top: 12px;
+    animation: fadeUp .5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 8px 0;
+  }
+
+  /* ─── Section ─── */
+  .section { padding: 100px 0; }
+  .section-label {
+    font-size: .75rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px; opacity: .9;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 18px;
+  }
+  .section-sub {
+    color: var(--muted); max-width: 500px; font-size: 1rem;
+    margin-bottom: 60px;
+  }
+
+  /* ─── Feature cards ─── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 20px;
+  }
+
+  .feat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: transform .35s cubic-bezier(.22,.9,.36,1),
+                border-color .35s,
+                box-shadow .35s;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .feat-card.visible {
+    opacity: 1; transform: translateY(0);
+    transition: opacity .6s ease, transform .6s ease,
+                border-color .35s, box-shadow .35s;
+  }
+  .feat-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: rgba(232,184,75,.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,.4), 0 0 40px rgba(232,184,75,.08);
+  }
+
+  /* Glow blob */
+  .feat-card::after {
+    content: '';
+    position: absolute;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,184,75,.12), transparent 70%);
+    top: -40px; right: -40px;
+    transition: transform .4s;
+  }
+  .feat-card:hover::after { transform: scale(1.5); }
+
+  .feat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem; font-weight: 900;
+    color: rgba(232,184,75,.1);
+    line-height: 1;
+    position: absolute; top: 18px; right: 24px;
+    letter-spacing: -.04em;
+  }
+
+  .feat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: rgba(232,184,75,.1);
+    border: 1px solid rgba(232,184,75,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 22px;
+  }
+
+  .feat-tag {
+    display: inline-block;
+    font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(232,184,75,.1);
+    border: 1px solid rgba(232,184,75,.2);
+    padding: 3px 10px; border-radius: 100px;
+    margin-bottom: 14px;
+  }
+
+  .feat-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 10px; line-height: 1.3;
+  }
+
+  .feat-card p {
+    color: var(--muted); font-size: .9rem; line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .feat-value {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: rgba(232,184,75,.05);
+    border-left: 2px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: .85rem;
+    color: #c9b882;
+  }
+  .feat-value::before { content: '✦'; color: var(--gold); font-size: .75rem; margin-top: 2px; }
+
+  /* ─── Free vs VIP compare ─── */
+  .compare-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+  @media (max-width: 640px) { .compare-wrap { grid-template-columns: 1fr; } }
+
+  .compare-col { padding: 36px 32px; }
+  .compare-col.free { border-right: 1px solid var(--border); }
+  .compare-col.vip  {
+    background: linear-gradient(135deg, rgba(232,184,75,.06), rgba(160,120,32,.04));
+    position: relative;
+  }
+  .compare-col.vip::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1' fill='rgba(232,184,75,.06)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .compare-head {
+    font-size: .8rem; letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .compare-col.free .compare-head { color: var(--muted); }
+  .compare-col.vip  .compare-head { color: var(--gold); }
+
+  .compare-list { list-style: none; }
+  .compare-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+  .compare-list li:last-child { border-bottom: none; }
+  .ic { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+
+  /* ─── Bottom CTA ─── */
+  .cta-section {
+    text-align: center;
+    padding: 100px 0;
+    position: relative;
+  }
+  .cta-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(232,184,75,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; margin-bottom: 20px;
+    position: relative;
+  }
+  .cta-section p {
+    color: var(--muted); max-width: 480px;
+    margin: 0 auto 40px; font-size: 1rem;
+    position: relative;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    text-align: center;
+    font-size: .8rem;
+    color: var(--muted);
+  }
+  footer strong { color: var(--gold); font-weight: 500; }
+
+  /* ─── Scroll reveal ─── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 600px) {
+    .countdown { gap: 10px; }
+    .count-block { padding: 14px 16px; min-width: 70px; }
+    .count-num { font-size: 1.7rem; }
+    .compare-col { padding: 24px 20px; }
+    .feat-card { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="wrap">
+    <div class="logo">Thesis<span>AI</span></div>
+    <div class="badge-nav">VIP — Coming Soon</div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero wrap">
+  <div class="hero-eyebrow">
+    <span class="dot"></span>
+    Segera Hadir · Eksklusif untuk Mahasiswa
+  </div>
+
+  <h1>Riset Lebih Cepat,<br />Skripsi Lebih <em>Cerdas.</em></h1>
+
+  <p class="hero-sub">
+    Paket VIP membawa kekuatan AI tingkat lanjut, sinkronisasi lintas perangkat, dan ekspor instan langsung ke ujung jarimu.
+  </p>
+
+  <!-- Countdown -->
+  <div class="countdown">
+    <div class="count-block">
+      <span class="count-num" id="cd-days">00</span>
+      <span class="count-lbl">Hari</span>
+    </div>
+    <div class="count-block">
+      <span class="count-num" id="cd-hours">00</span>
+      <span class="count-lbl">Jam</span>
+    </div>
+    <div class="count-block">
+      <span class="count-num" id="cd-mins">00</span>
+      <span class="count-lbl">Menit</span>
+    </div>
+    <div class="count-block">
+      <span class="count-num" id="cd-secs">00</span>
+      <span class="count-lbl">Detik</span>
+    </div>
+  </div>
+
+  <!-- Notify form -->
+  <div class="notify-form">
+    <input type="email" id="email-input" placeholder="email@kampus.ac.id" autocomplete="off" />
+    <button class="btn-gold" onclick="handleNotify()">Beritahu Saya 🔔</button>
+  </div>
+  <p class="notify-success" id="notify-msg">✅ Terima kasih! Kamu akan jadi yang pertama tahu.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── FEATURES ── -->
+<section class="section">
+  <div class="wrap">
+    <p class="section-label reveal">Fitur Eksklusif VIP</p>
+    <h2 class="section-title reveal">6 Senjata Rahasia<br />Mahasiswa Berprestasi</h2>
+    <p class="section-sub reveal">Setiap fitur dirancang khusus untuk mempercepat satu tahap kritis dalam proses skripsimu.</p>
+
+    <div class="features-grid">
+
+      <!-- Card 1 -->
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <div class="feat-icon">☁️</div>
+        <span class="feat-tag">Cloud Sync</span>
+        <h3>Sinkronisasi Cloud<br />Lintas Perangkat</h3>
+        <p>Data matriks, catatan bimbingan, dan tugasmu tersimpan aman di cloud. Mulai di laptop, lanjut di HP saat bimbingan — seamless.</p>
+        <div class="feat-value">Data aman meski laptop hilang atau rusak. Akses 24/7 dari mana saja.</div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <div class="feat-icon">🧠</div>
+        <span class="feat-tag">Super AI</span>
+        <h3>Model AI Tingkat Lanjut</h3>
+        <p>Upgrade dari model cepat ke GPT-4o, o1, atau Claude 3.5 Sonnet untuk analisis jurnal yang lebih dalam dan draf paragraf yang lebih natural.</p>
+        <div class="feat-value">Analisis PDF lebih akurat, draf paragraf minim halusinasi.</div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <div class="feat-icon">🎙️</div>
+        <span class="feat-tag">Voice Transcript</span>
+        <h3>Transkrip Bimbingan<br />Voice-to-Text AI</h3>
+        <p>Rekam suara langsung saat bimbingan tatap muka. AI otomatis mengubah ucapan dosen menjadi teks dan merangkumnya jadi To-Do List revisi.</p>
+        <div class="feat-value">Tidak ada lagi lupa atau bingung dengan instruksi dosen pembimbing.</div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feat-card">
+        <span class="feat-num">04</span>
+        <div class="feat-icon">📄</div>
+        <span class="feat-tag">Magic Export</span>
+        <h3>Ekspor Dokumen<br />Satu Klik</h3>
+        <p>Unduh Matriks Literatur atau Draft Bab langsung sebagai file .docx berformat rapi — margin, font Times New Roman, spasi 1.5 — siap pakai.</p>
+        <div class="feat-value">Hemat jam copy-paste dan formatting tabel di Microsoft Word.</div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feat-card">
+        <span class="feat-num">05</span>
+        <div class="feat-icon">📚</div>
+        <span class="feat-tag">Multi-Doc Chat</span>
+        <h3>Analisis 10 PDF<br />Sekaligus</h3>
+        <p>Upload hingga 10 jurnal sekaligus dan tanyakan lintas dokumen: "Mana yang pakai metode kuantitatif? Apa perbedaan hasilnya?"</p>
+        <div class="feat-value">Sintesis literatur Bab 2 selesai dalam hitungan menit.</div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="feat-card">
+        <span class="feat-num">06</span>
+        <div class="feat-icon">📎</div>
+        <span class="feat-tag">Citation Sync</span>
+        <h3>Generator Sitasi<br />Mendeley &amp; Zotero</h3>
+        <p>Ekspor daftar pustaka bukan hanya sebagai teks, tapi langsung sebagai file .bib atau .ris yang bisa diimpor ke Mendeley atau Zotero.</p>
+        <div class="feat-value">Referensi siap masuk reference manager tanpa input manual.</div>
+      </div>
+
+    </div><!-- /features-grid -->
+
+    <!-- Compare table -->
+    <div class="reveal" style="margin-top:80px">
+      <p class="section-label" style="margin-bottom:10px">Perbandingan Paket</p>
+      <h3 class="section-title" style="font-size:1.8rem;margin-bottom:0">Gratis vs <em style="font-style:normal;color:var(--gold)">VIP</em></h3>
+    </div>
+
+    <div class="compare-wrap reveal">
+      <div class="compare-col free">
+        <p class="compare-head">Gratis</p>
+        <ul class="compare-list">
+          <li><span class="ic">💾</span> Penyimpanan lokal (IndexedDB)</li>
+          <li><span class="ic">🤖</span> Model AI cepat &amp; ringan (gpt-4o-mini)</li>
+          <li><span class="ic">📄</span> Chat dengan 1 PDF per sesi</li>
+          <li><span class="ic">📋</span> Ekspor data format .json</li>
+          <li><span class="ic">📝</span> Sitasi format teks (APA/IEEE)</li>
+          <li><span class="ic">❌</span> Tidak ada rekam suara</li>
+          <li><span class="ic">❌</span> Tidak ada sinkronisasi</li>
+        </ul>
+      </div>
+      <div class="compare-col vip">
+        <p class="compare-head">✦ VIP</p>
+        <ul class="compare-list">
+          <li><span class="ic">☁️</span> Cloud Sync lintas perangkat</li>
+          <li><span class="ic">🧠</span> Pilihan model Super AI (GPT-4o, Claude Sonnet)</li>
+          <li><span class="ic">📚</span> Multi-doc chat hingga 10 PDF</li>
+          <li><span class="ic">📄</span> Ekspor .docx berformat sempurna</li>
+          <li><span class="ic">📎</span> Ekspor .bib / .ris untuk Mendeley &amp; Zotero</li>
+          <li><span class="ic">🎙️</span> Rekam &amp; transkrip bimbingan dosen</li>
+          <li><span class="ic">🔒</span> Backup otomatis — data tidak pernah hilang</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── BOTTOM CTA ── -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="wrap" style="position:relative">
+    <h2>Jadilah yang Pertama<br />Merasakannya</h2>
+    <p>Daftarkan emailmu sekarang dan dapatkan akses early bird eksklusif saat VIP diluncurkan.</p>
+    <div class="notify-form" style="justify-content:center">
+      <input type="email" id="email-input-2" placeholder="email@kampus.ac.id" autocomplete="off" />
+      <button class="btn-gold" onclick="handleNotify2()">Daftar Early Bird ✦</button>
+    </div>
+    <p class="notify-success" id="notify-msg-2">✅ Kamu sudah masuk daftar early bird!</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Dibuat dengan ❤ untuk para pejuang skripsi Indonesia &nbsp;·&nbsp; <strong>ThesisAI VIP</strong> &nbsp;·&nbsp; © 2025
+  </div>
+</footer>
+
+<script>
+/* ── Stars ── */
+(function(){
+  const c = document.getElementById('stars-canvas');
+  const ctx = c.getContext('2d');
+  let W, H, stars;
+  function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; init(); }
+  function init(){
+    stars = Array.from({length:220}, ()=>({
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*1.2+.2,
+      a: Math.random(), da: (Math.random()*.004+.001)*(Math.random()<.5?1:-1)
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.a = Math.max(.05, Math.min(1, s.a+s.da));
+      if(s.a<=.05||s.a>=1) s.da*=-1;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(232,184,75,${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize(); draw();
+  window.addEventListener('resize', resize);
+})();
+
+/* ── Countdown — target: 30 days from now ── */
+(function(){
+  const target = new Date(Date.now() + 30*24*60*60*1000);
+  function tick(){
+    const diff = target - Date.now();
+    if(diff<=0) return;
+    const d = String(Math.floor(diff/86400000)).padStart(2,'0');
+    const h = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+    document.getElementById('cd-days').textContent  = d;
+    document.getElementById('cd-hours').textContent = h;
+    document.getElementById('cd-mins').textContent  = m;
+    document.getElementById('cd-secs').textContent  = s;
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ── Notify forms ── */
+function handleNotify(){
+  const v = document.getElementById('email-input').value.trim();
+  if(!v || !v.includes('@')){ document.getElementById('email-input').focus(); return; }
+  document.getElementById('notify-msg').style.display = 'block';
+  document.getElementById('email-input').value = '';
+}
+function handleNotify2(){
+  const v = document.getElementById('email-input-2').value.trim();
+  if(!v || !v.includes('@')){ document.getElementById('email-input-2').focus(); return; }
+  document.getElementById('notify-msg-2').style.display = 'block';
+  document.getElementById('email-input-2').value = '';
+}
+
+/* ── Scroll reveal ── */
+(function(){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal, .feat-card').forEach(el=>io.observe(el));
+  // stagger feat cards
+  document.querySelectorAll('.feat-card').forEach((c,i)=>{
+    c.style.transitionDelay = (i*0.1)+'s';
+  });
+})();
+</script>
+</body>
 </html>
