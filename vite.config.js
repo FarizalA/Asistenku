@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite'
-   import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react'
 
-   export default defineConfig({
-     plugins: [react()],
-     base: '/Asistenku/', // <--- Tambahkan nama repo Anda di sini
-   })
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  // PENTING: Nama base HARUS persis sama dengan nama repository GitHub Anda!
+  // Sesuai screenshot Anda sebelumnya, nama repo-nya adalah "Asistenku"
+  base: '/Asistenku/', 
+})
