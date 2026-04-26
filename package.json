@@ -9,12 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev": "vite",
-     "build": "vite build",
-     "lint": "eslint .",
-     "preview": "vite preview",
-     "predeploy": "npm run build",     
-     "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "lucide-react": "^1.11.0",
